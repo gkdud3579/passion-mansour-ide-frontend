@@ -1,6 +1,23 @@
 import Editor from './components/Editor';
 import Sidebar from './components/Sidebar';
-import OutputBar from './components/Outputbar';
-import ToolBar from './components/Toolbar';
-import './IDE.css';
+import Toolbar from './components/Toolbar';
+import Output from './components/Output';
+import { ChakraProvider } from '@chakra-ui/react';
+import './IDEPage.css';
 
+const IDEPage = () => {
+  return (
+    <ChakraProvider>
+      <div className="IDEPage">
+        <Sidebar />
+        <main>
+          <Toolbar />
+          <Editor />
+          <Output />
+        </main>
+      </div>
+    </ChakraProvider>
+  );
+};
+
+export default IDEPage;
