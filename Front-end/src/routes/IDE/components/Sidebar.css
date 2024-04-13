@@ -1,0 +1,32 @@
+.sidebar-container {
+  width: 250px;
+  background-color: #fafafa;
+  /* padding: 10px; */
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+}
+
+.sidebar-title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.sidebar-title {
+  color: #000;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.sidebar-title-container button:not(:last-child) {
+  margin-right: -70px;
+}
+
+.list-container {
+  padding: 10px 40px;
+}

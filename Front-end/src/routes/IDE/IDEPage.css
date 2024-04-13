@@ -1,11 +1,28 @@
-.ide-container {
+/* IDEPage.css */
+.ide-page {
     display: flex;
+    flex-direction: column;
     height: 100vh;
   }
   
-  .main-area {
-    flex-grow: 1;
+  .ide-main {
     display: flex;
-    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    height: calc(100% - 50px);
+  }
+  
+  .sidebar {
+    width: 250px;
+    height: 100%;
+  }
+  
+  .editor {
+    flex-grow: 1;
+    height: 100%;
+  }
+  
+  .output {
+    height: 200px;
   }
   

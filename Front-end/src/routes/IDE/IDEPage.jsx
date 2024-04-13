@@ -1,20 +1,21 @@
-import Editor from './components/Editor';
-import Sidebar from './components/Sidebar';
-import Toolbar from './components/Toolbar';
-import Output from './components/Output';
-import { ChakraProvider } from '@chakra-ui/react';
-import './IDEPage.css';
+import React from 'react';
+import Editor from "./components/Editor";
+import Sidebar from "./components/Sidebar";
+import Toolbar from "./components/Toolbar";
+import Output from "./components/Output";
+import { ChakraProvider } from "@chakra-ui/react";
+import "./IDEPage.css";
 
 const IDEPage = () => {
   return (
     <ChakraProvider>
-      <div className="IDEPage">
-        <Sidebar />
-        <main>
-          <Toolbar />
+      <div className="ide-page">
+        <Toolbar />
+        <div className="ide-main">
+          <Sidebar />
           <Editor />
-          <Output />
-        </main>
+        </div>
+        <Output />
       </div>
     </ChakraProvider>
   );

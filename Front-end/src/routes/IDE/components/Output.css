@@ -1,0 +1,19 @@
+.output-container {
+  background-color: #fafafa;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.output-title {
+  color: #000;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.output-result-container {
+  background-color: #efefef;
+  padding: 10px 20px;
+}
