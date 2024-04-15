@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background: #fafafa;
+  border-left: 1px solid #ccc;
+  flex: 1;
+}
+
+.title {
+  /* padding: 10px 20px; */
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-left: 8px;
+}
+
+.resultContainer {
+  flex: 1;
+  padding: 10px 20px;
+  background: #f1f1f1;
+  overflow: auto;
+  width: 100%;
+}
+
+.result {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
