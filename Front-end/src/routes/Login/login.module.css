@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100dvw;
+  height: 100dvh;
+}
+
+.logo {
+  font-size: 58px;
+  margin-bottom: 68px;
+}
+
+.fromDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 440px;
+}
+
+.inputBox {
+  display: block;
+  width: 100%;
+  height: 72px;
+  border: 1px solid #d5d5d5;
+  border-radius: 5px;
+  background: #fff;
+  color: #000;
+  font-size: 20px;
+  margin-bottom: 24px;
+  padding: 6px 12px;
+  box-sizing: border-box;
+}
+
+.inputBox::placeholder {
+  color: #aaa;
+}
+
+.inputBox:last-child {
+  margin-bottom: 32;
+}
+
+.buttonBox {
+  display: block;
+  width: 440px;
+  height: 78px;
+  font-size: 20px;
+  color: #7c7c7c;
+  border: none;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin-bottom: 26px;
+  cursor: pointer;
+}
+
+.spanMsg {
+  font-size: 14px;
+  color: #444;
+}
+
+.linkMsg {
+  color: #1d6feb;
+}
+
+.linkMsg:hover {
+  text-decoration: underline;
+}
