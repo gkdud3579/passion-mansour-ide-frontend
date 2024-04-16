@@ -1,9 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: passion-mansour-ide-frontend-deployment
+  name: passion-mansour-ide-frontend
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: passion-mansour-ide-frontend
@@ -14,20 +13,5 @@ spec:
     spec:
       containers:
         - name: passion-mansour-ide-frontend
-          image: passion-mansour-ide-frontend/passion-mansour-ide-frontend:tag
-          ports:
-            - containerPort: 3000
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: passion-mansour-ide-frontend
-spec:
-  type: LoadBalancer
-  selector:
-    app: passion-mansour-ide-frontend
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
+          image: krmp-d2hub-idock.9rum.cc/dev-test/repo_3eb410d2e2cc:latest
+          imagePullPolicy: Always
