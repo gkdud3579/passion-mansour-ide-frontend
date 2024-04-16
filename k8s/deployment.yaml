@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: passion-mansour-ide-frontend
+spec:
+  selector:
+    matchLabels:
+      app: passion-mansour-ide-frontend
+  template:
+    metadata:
+      labels:
+        app: passion-mansour-ide-frontend
+    spec:
+      containers:
+        - name: passion-mansour-ide-frontend
+          image: krmp-d2hub-idock.9rum.cc/dev-test/repo_3eb410d2e2cc:latest
+          imagePullPolicy: Always
