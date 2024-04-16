@@ -1,0 +1,106 @@
+.chatModal {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  height: 100%;
+  background: #ffffff;
+  border-left: 1px solid #ccc;
+}
+
+.chatHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #ffffff;
+  font-weight: bold;
+}
+
+.chatFunction {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.messageList {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  /* padding: 10px;
+  border-radius: 15px;
+  max-width: 80%; */
+}
+
+.messageItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.myMessage {
+  align-self: flex-end;
+}
+
+.theirMessage {
+  align-self: flex-start;
+}
+
+.messageText {
+  display: inline-block;
+  margin: 5px 10px;
+  word-break: break-word;
+  background: #efefef;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.profileImage {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.messageInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 10px;
+}
+
+.userName {
+  font-weight: bold;
+}
+
+.messageTimestamp {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.inputContainer {
+  display: flex;
+  padding: 10px;
+}
+
+.messageInput {
+  flex-grow: 1;
+  padding: 10px;
+  background: #efefef;
+}
+
+.sendButton {
+  padding: 10px 15px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
