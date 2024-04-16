@@ -3,10 +3,8 @@ kind: Service
 metadata:
   name: passion-mansour-ide-frontend
 spec:
-  type: LoadBalancer
+  ports:
+    - port: 3000
+      targetPort: 3000
   selector:
     app: passion-mansour-ide-frontend
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
