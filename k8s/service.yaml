@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: passion-mansour-ide-frontend
+spec:
+  type: LoadBalancer
+  selector:
+    app: passion-mansour-ide-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000

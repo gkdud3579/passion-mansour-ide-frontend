@@ -1,3 +1,4 @@
 namespace: passion-mansour-ide-frontend
 resources:
   - deployment.yaml
+  - service.yaml
