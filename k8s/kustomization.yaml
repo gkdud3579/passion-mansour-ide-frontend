@@ -1,4 +1,10 @@
-namespace: passion-mansour-ide-frontend
+namespace: krampoline
 resources:
   - deployment.yaml
   - service.yaml
+  - ingress.yaml
+  - mariadb.yaml
+configMapGenerator:
+  - name: init-db
+    files:
+      - configs/init.sql
