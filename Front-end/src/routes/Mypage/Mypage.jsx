@@ -19,7 +19,7 @@ export default function Mypage() {
         </div>
 
         <div className={styles.infoSection}>
-          <h4>개인정보 설정</h4>
+          <h4 className={styles.infoTitle}>개인정보 설정</h4>
           <input type="text" placeholder="닉네임" className={styles.inputField} />
           <input type="text" placeholder="비밀번호" className={styles.inputField} />
           <input type="text" placeholder="비밀번호 확인" className={styles.inputField} />
@@ -30,7 +30,7 @@ export default function Mypage() {
         </div>
 
         <div className={styles.settingsSection}>
-          <h4>기본 설정</h4>
+          <h4 className={styles.settingsTitle}>기본 설정</h4>
           <select className={styles.dropdown}>
             <option value="light">Light</option>
             <option value="dark">Dark</option>

@@ -31,6 +31,10 @@
   background-size: cover;
 }
 
+.infoTitle {
+  margin-bottom: 8px;
+}
+
 .infoSection {
   display: flex;
   flex-direction: column;
@@ -63,6 +67,10 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.settingsTitle {
+  margin-bottom: 8px;
 }
 
 .settingsSection {
