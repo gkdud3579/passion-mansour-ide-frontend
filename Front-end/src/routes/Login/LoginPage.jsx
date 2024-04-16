@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import styles from './login.module.css';
+import styles from './Login.module.css';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const LoginPage = () => {
   const [userId, setUserId] = useState('');
@@ -37,16 +38,28 @@ const LoginPage = () => {
 
   return (
     <div className={styles.container}>
+      <Helmet>
+        <title>codeVIBE - 로그인</title>
+      </Helmet>
+
       <h1 className={styles.logo}>로고영역</h1>
 
       <form onSubmit={onSubmit} className={styles.fromDiv}>
-        <input type="text" className={styles.inputBox} value={userId} onChange={userIdChange} placeholder="아이디" />
+        <input
+          type="text"
+          className={styles.inputBox}
+          value={userId}
+          onChange={userIdChange}
+          placeholder="아이디"
+          required
+        />
         <input
           type="password"
           className={styles.inputBox}
           value={userPw}
           onChange={userPwChange}
           placeholder="비밀번호"
+          required
         />
 
         <button type="submit" className={styles.buttonBox}>
@@ -56,7 +69,7 @@ const LoginPage = () => {
 
       <span className={styles.spanMsg}>
         계정이 없으신가요?{' '}
-        <Link to="/join" className={styles.linkMsg}>
+        <Link to="/signup" className={styles.linkMsg}>
           회원가입
         </Link>
       </span>

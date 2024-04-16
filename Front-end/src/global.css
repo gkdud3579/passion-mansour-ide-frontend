@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  background: #fafafa;
+}
+
+a {
+  text-decoration: none;
+}
+
+.javascript {
+  background: #ffc8c8;
+}
+
+.java {
+  background: #b2ffbe;
+}
+
+.c {
+  background: #b2ffbe;
+}
+
+.python {
+  background: #b2ffbe;
+}
+
+.typescript {
+  background: #b2ffbe;
+}
+
+.php {
+  background: #b2ffbe;
+}
+
+.csharp {
+  background: #b2ffbe;
+}
