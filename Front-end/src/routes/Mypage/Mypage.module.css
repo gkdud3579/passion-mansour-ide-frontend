@@ -2,6 +2,106 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100dvw;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box; /* padding을 포함한 width로 계산 */
+}
+
+.profileContainer {
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  margin-bottom: 40px;
+  gap: 30px;
+}
+
+.profileContainer button {
+  padding: 5px 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.profileImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-size: cover;
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.emailContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.inputFieldEmail {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.sendButton {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.settingsSection {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 100px;
+}
+
+.dropdown {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 135px;
+}
+
+.saveButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancelButton {
+  padding: 10px 20px;
+  background-color: #ccc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
