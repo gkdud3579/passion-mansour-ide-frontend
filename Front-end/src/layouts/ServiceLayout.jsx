@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import styles from './ServiceLayout.module.css';
 import { useCallback } from 'react';
+import { Logo } from '../components/Icons';
 
 const userInfo = {
   id: new Date(),
   name: '홍길동',
   nickname: '제임슨',
-  pofile: `img/default_profile.png`,
+  pofile: 'img/default_profile.png',
   createAt: '2024-04-12 10:34:23',
   theme: 'light',
 };
@@ -21,21 +22,23 @@ const ServiceLayout = ({ children }) => {
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <Link to="/main">
-            <h1 className={styles.logo}>Logo</h1>
+            <Logo size={150} />
           </Link>
 
           <nav className={styles.nav}>
             <Link to="/main">바이브 IDE</Link>
           </nav>
 
-          <div>
+          <div className={styles.utilBox}>
             <Link to="/mypage" className={styles.pofileBox}>
-              <figure className={styles.pofileFigure}>
-                <img className={styles.pofileImg} src={userInfo.pofile} alt={userInfo.name} />
+              <figure className={styles.profileFigure}>
+                <img className={styles.profileImg} src={userInfo.pofile} alt={userInfo.name} />
               </figure>
-              {userInfo.nickname}
+              <span className={styles.nickname}>{userInfo.nickname}</span>
             </Link>
-            <button onClick={onLogout}>로그아웃</button>
+            <button onClick={onLogout} className={styles.logoutBtn}>
+              로그아웃
+            </button>
           </div>
         </div>
       </header>

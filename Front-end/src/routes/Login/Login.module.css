@@ -61,7 +61,9 @@
 }
 
 .linkMsg {
-  color: #1d6feb;
+  display: inline-block;
+  color: var(--primary);
+  margin-left: 6px;
 }
 
 .linkMsg:hover {

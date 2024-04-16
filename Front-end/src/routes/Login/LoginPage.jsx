@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import styles from './Login.module.css';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { Logo } from '../../components/Icons';
 
 const LoginPage = () => {
   const [userId, setUserId] = useState('');
@@ -42,7 +43,9 @@ const LoginPage = () => {
         <title>codeVIBE - 로그인</title>
       </Helmet>
 
-      <h1 className={styles.logo}>로고영역</h1>
+      <div className={styles.logo}>
+        <Logo size={264} />
+      </div>
 
       <form onSubmit={onSubmit} className={styles.fromDiv}>
         <input

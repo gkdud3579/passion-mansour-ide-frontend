@@ -3,6 +3,7 @@ import styles from './Signup.module.css';
 import { Link } from 'react-router-dom';
 import useInput from '../../hooks/userInput';
 import { Helmet } from 'react-helmet';
+import { Logo } from '../../components/Icons';
 
 const SignupPage = () => {
   const [name, onChangeName] = useInput('');
@@ -56,7 +57,9 @@ const SignupPage = () => {
         <title>codeVIBE - 회원가입</title>
       </Helmet>
 
-      <h1 className={styles.logo}>로고영역</h1>
+      <div className={styles.logo}>
+        <Logo size={264} />
+      </div>
 
       <form onSubmit={onSubmit} className={styles.fromDiv}>
         <div>
@@ -78,7 +81,7 @@ const SignupPage = () => {
         </div>
         <div>
           <input
-            type="text"
+            type="password"
             className={styles.inputBox}
             value={password}
             onChange={onChangePw}
@@ -87,7 +90,7 @@ const SignupPage = () => {
         </div>
         <div>
           <input
-            type="text"
+            type="password"
             className={styles.inputBox}
             value={passwordCheck}
             onChange={userPwChkChange}

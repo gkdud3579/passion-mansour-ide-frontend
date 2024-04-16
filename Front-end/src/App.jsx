@@ -4,6 +4,7 @@ import SignupPage from './routes/Signup/SignupPage';
 import MainPage from './routes/Main/MainPage';
 import MyPage from './routes/Mypage/Mypage';
 import LoginPage from './routes/Login/LoginPage';
+import NotFound from './routes/NotFound/NotFound';
 import './global.css';
 import { useEffect } from 'react';
 // import { AuthProvider } from './contexts/AuthContext';
@@ -34,6 +35,7 @@ function App() {
           <Route path="/main" element={<MainPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/ide" element={<IDEPage />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
 

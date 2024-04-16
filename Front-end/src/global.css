@@ -1,3 +1,9 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+:root {
+  --primary: #1d6feb;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,7 +11,13 @@
 
 html,
 body {
+  font-family: 'pretendard', 'sans-serif';
   background: #fafafa;
+}
+
+ul,
+li {
+  list-style: none;
 }
 
 a {
@@ -38,4 +50,14 @@ a {
 
 .csharp {
   background: #b2ffbe;
+}
+
+.public {
+  background: #e4ffd3;
+  color: #3b9b01;
+}
+
+.private {
+  background: #ffd8da;
+  color: #b7010b;
 }

@@ -14,7 +14,7 @@ const Chatting = () => {
       text: '안녕하세요.',
       user: {
         name: '고영희',
-        avatar: '/sample.png',
+        avatar: 'img/sample.png',
       },
       timestamp: dayjs().fromNow(),
       isOwn: false,
@@ -63,25 +63,23 @@ const Chatting = () => {
         </div>
       </header>
       <ul className={styles.messageList}>
-  {messages.map((message) => (
-    <li key={message.id} className={styles.messageItem}>
-      <div className={message.isOwn ? styles.myMessage : styles.theirMessage}>
-        {!message.isOwn && (
-          <img src={message.user.avatar} alt={message.user.name} className={styles.profileImage} />
-        )}
-        <div className={styles.messageBubble}>
-          <div className={styles.messageInfo}>
-            <span className={styles.userName}>{!message.isOwn ? message.user.name : '나'}</span>
-            <span className={styles.messageTimestamp}>
-              {dayjs(message.timestamp).fromNow()}
-            </span>
-          </div>
-          <p className={styles.messageText}>{message.text}</p>
-        </div>
-      </div>
-    </li>
-  ))}
-</ul>
+        {messages.map((message) => (
+          <li key={message.id} className={styles.messageItem}>
+            <div className={message.isOwn ? styles.myMessage : styles.theirMessage}>
+              {!message.isOwn && (
+                <img src={message.user.avatar} alt={message.user.name} className={styles.profileImage} />
+              )}
+              <div className={styles.messageBubble}>
+                <div className={styles.messageInfo}>
+                  <span className={styles.userName}>{!message.isOwn ? message.user.name : '나'}</span>
+                  <span className={styles.messageTimestamp}>{dayjs(message.timestamp).fromNow()}</span>
+                </div>
+                <p className={styles.messageText}>{message.text}</p>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
       <div className={styles.inputContainer}>
         <input
           type="text"

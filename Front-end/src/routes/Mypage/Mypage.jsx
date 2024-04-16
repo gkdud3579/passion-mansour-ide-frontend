@@ -11,7 +11,7 @@ export default function Mypage() {
 
       <div className={styles.container}>
         <div className={styles.profileContainer}>
-        <img src="/sample.png" alt="profile" className={styles.profileImage} />
+          <img src="img/sample.png" alt="profile" className={styles.profileImage} />
           <div className={styles.profileDetails}>
             <h2>홍길동</h2>
             <button>프로필 변경</button>
