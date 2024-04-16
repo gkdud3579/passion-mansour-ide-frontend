@@ -8,7 +8,7 @@ WORKDIR /app
 COPY Front-end/package.json Front-end/yarn.lock ./
 
 # Install dependencies using Yarn
-RUN yarn install --frozen-lockfile
+RUN yarn install
 
 # Copy the rest of your app's source code from the Front-end directory
 COPY Front-end .
