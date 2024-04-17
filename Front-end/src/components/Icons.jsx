@@ -67,3 +67,48 @@ export const DownIcon = ({ size, color }) => {
     </svg>
   );
 };
+
+// 검색 아이콘
+export const SearchIcon = ({ size, color }) => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} viewBox="0 0 512 512" fill={color ? color : '#202020'}>
+      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+    </svg>
+  );
+};
+
+// 사람 아이콘
+export const UserIcon = ({ size, color }) => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} viewBox="0 0 448 512" fill={color ? color : 'black'}>
+      <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
+    </svg>
+  );
+};
+
+// 채팅 전송 아이콘
+export const SendIcon = ({ size, color }) => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} viewBox="0 0 448 512" fill={color ? color : 'black'}>
+      <path d="M429.6 92.1c4.9-11.9 2.1-25.6-7-34.7s-22.8-11.9-34.7-7l-352 144c-14.2 5.8-22.2 20.8-19.3 35.8s16.1 25.8 31.4 25.8H224V432c0 15.3 10.8 28.4 25.8 31.4s30-5.1 35.8-19.3l144-352z" />
+    </svg>
+  );
+};
+
+// 체크 아이콘
+export const CheckIcon = ({ size, color }) => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} viewBox="0 0 448 512" fill={color ? color : 'black'}>
+      <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" />
+    </svg>
+  );
+};
+
+// 닫기 아이콘
+export const CloseIcon = ({ size, color }) => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} viewBox="0 0 384 512" fill={color ? color : 'black'}>
+      <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+    </svg>
+  );
+};

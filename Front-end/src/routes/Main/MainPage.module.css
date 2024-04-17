@@ -95,6 +95,7 @@
   margin-bottom: 24px;
   padding: 20px 22px;
   border-radius: 5px;
+  cursor: pointer;
   transition: all 0.3s;
 }
 
@@ -197,6 +198,23 @@
   background: #fff;
 }
 
+.modalTitle {
+  color: #000;
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 56px;
+}
+
+.checkBox {
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.checkBox input[type='checkbox'] {
+  display: inline-block;
+  margin-right: 6px;
+}
+
 .inputBox {
   display: block;
   width: 100%;
@@ -225,8 +243,48 @@
   box-sizing: border-box;
 }
 
+.privatTitle {
+  color: #000;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 34px;
+}
+
 .btnBox {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 60px;
+}
+
+.cancel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 136px;
+  height: 54px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  background: #ccc;
+  border-radius: 5px;
+  margin-right: 16px;
+  cursor: pointer;
+}
+
+.confirm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 136px;
+  height: 54px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  background: var(--primary);
+  border-radius: 5px;
+  margin-right: 16px;
+  cursor: pointer;
 }

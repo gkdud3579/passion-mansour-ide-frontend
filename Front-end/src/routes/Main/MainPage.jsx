@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import ServiceLayout from '../../layouts/ServiceLayout';
 import './MainPage.module.css';
 import styles from './MainPage.module.css';
@@ -6,8 +6,9 @@ import { Helmet } from 'react-helmet';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ko';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LANGUAGE_VERSIONS } from '../IDE/Constants';
+import { CommentIcon, ExitIcon } from '../../components/Icons';
 
 dayjs.locale('ko');
 dayjs.extend(relativeTime);
@@ -29,18 +30,19 @@ const posts = [
       profile: 'img/default_profile.png',
       createAt: '2024-04-12 10:34:23',
       theme: 'light',
+      permission: true,
     },
     users: [
-      { id: 1, name: '톰' },
-      { id: 2, name: '코딩캣' },
+      { id: 1, name: '톰', permission: false },
+      { id: 2, name: '코딩캣', permission: false },
     ],
   },
   {
     id: 1,
-    title: '열정 만수르 프로젝트 코드리뷰 0411',
+    title: '열정 만수르 프로젝트 코드리뷰 pw:0411',
     createAt: new Date('2024-04-01'),
     private: true,
-    privatePassword: 1234,
+    privatePassword: '0411',
     lagnguage: 'java',
     maxUser: 4,
     user: {
@@ -61,31 +63,134 @@ const maxUsers = Array.from({ length: 5 }, (_, i) => i + 1);
 export default function MainPage() {
   const [title, setTitle] = useState('');
   const [password, setPassword] = useState('');
+  const [privatePassword, setPrivatePassword] = useState('');
+  const [privateRoom, setPrivateRoom] = useState({ id: 0, title: '', pw: '' });
+  const [checked, setChecked] = useState(false);
+  const [languageValue, setLanguageValue] = useState('');
   const [isMakeOpen, setIsMakeOpen] = useState(false);
+  const [isPrivateOpen, setIsPrivateOpen] = useState(false);
+
+  const titleRef = useRef();
+  const languageRef = useRef();
+  const maxRef = useRef();
+  const pwRef = useRef();
+  const pwConfirm = useRef();
+
+  const navigate = useNavigate();
 
   const onChangeTitle = useCallback((e) => {
+    titleRef.current.style.borderColor = '#d5d5d5';
     setTitle(e.target.value);
   }, []);
 
   const onChangePassword = useCallback((e) => {
-    setPassword(e.target.value);
+    const value = Number(e.target.value);
+    if (isNaN(value)) return;
+    setPassword(String(value));
+  }, []);
+
+  const onChangePrivatePassword = useCallback((e) => {
+    pwConfirm.current.style.borderColor = '#d5d5d5';
+    const value = Number(e.target.value);
+    if (isNaN(value)) return;
+    setPrivatePassword(String(e.target.value));
   }, []);
 
   const onClickMakeOpen = useCallback(() => {
     setIsMakeOpen(!isMakeOpen);
   }, [isMakeOpen]);
 
-  const onClickCancel = useCallback(() => {
-    setIsMakeOpen(!isMakeOpen);
-  }, [isMakeOpen]);
+  const onClickCancel = useCallback(
+    (state) => {
+      if (state === 'make') setIsMakeOpen(!isMakeOpen);
+      else if (state === 'private') setIsPrivateOpen(!isPrivateOpen);
+    },
+    [isMakeOpen, isPrivateOpen],
+  );
+
+  const onChangeLanguage = useCallback((e) => {
+    languageRef.current.style.borderColor = '#d5d5d5';
+    setLanguageValue(e.target.value);
+  }, []);
 
   const onFilter = useCallback(() => {}, []);
 
-  const onSubmit = useCallback((e) => {
-    e.preventDefault();
+  const onChangeCheck = useCallback(() => {
+    setPassword('');
+    setChecked(!checked);
+  }, [checked]);
 
-    console.log('make success!!');
-  }, []);
+  const onClickPriviateOpen = useCallback(
+    (state, id, title, pw) => {
+      setPrivatePassword('');
+      setPrivateRoom({ id: 0, title: '', pw: '' });
+
+      if (state) {
+        setPrivateRoom({ id, title, pw });
+        setIsPrivateOpen(!isPrivateOpen);
+      } else {
+        navigate(`/ide?id=${id}`);
+      }
+    },
+    [isPrivateOpen, navigate],
+  );
+
+  const onSubmitMake = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      if (title === '') {
+        titleRef.current.style.borderColor = '#f00';
+        return false;
+      }
+
+      if (languageValue === '') {
+        languageRef.current.style.borderColor = '#f00';
+        return false;
+      }
+
+      if (maxRef === '') {
+        maxRef.current.style.borderColor = '#f00';
+        return false;
+      }
+
+      if (checked && languageValue.length > 4) {
+        pwRef.current.style.borderColor = '#f00';
+        return false;
+      }
+
+      const roomInfo = {
+        title,
+        password,
+        language: languageValue,
+      };
+
+      console.log(roomInfo);
+      console.log('make success!!');
+    },
+    [title, password, languageValue, checked],
+  );
+
+  const onSubmitPrivate = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      if (privatePassword === '') {
+        pwConfirm.current.style.borderColor = '#f00';
+        pwConfirm.current.focus();
+        return false;
+      }
+
+      if (privatePassword !== privateRoom.pw) {
+        window.alert('올바르지 않는 패스워드 입니다.');
+        pwConfirm.current.focus();
+        return false;
+      }
+
+      navigate(`/ide?id=${privateRoom.id}&private=${privateRoom.pw}`);
+    },
+    [privatePassword, privateRoom, navigate],
+  );
 
   return (
     <ServiceLayout>
@@ -122,14 +227,18 @@ export default function MainPage() {
 
           {posts.length === 0 ? (
             <div>
-              <p>게시글이 없습니다.</p>
+              <p>생성도</p>
             </div>
           ) : (
             <>
               <div className={styles.itemWrapper}>
                 {posts.map((data) => {
                   return (
-                    <Link to={`/ide?id=${data.id}`} key={data.id} className={styles.itemBox}>
+                    <div
+                      key={data.id}
+                      className={styles.itemBox}
+                      onClick={() => onClickPriviateOpen(data.private, data.id, data.title, data.privatePassword)}
+                    >
                       <div className={styles.itemLeft}>
                         <div className={styles.itemUpperBox}>
                           <span className={`${styles.tag} ${data.private ? 'private' : 'public'}`}>
@@ -154,7 +263,7 @@ export default function MainPage() {
                         </figure>
                         {data.users.length !== 0 && <span>+{data.users.length}</span>}
                       </div>
-                    </Link>
+                    </div>
                   );
                 })}
               </div>
@@ -172,21 +281,30 @@ export default function MainPage() {
       {isMakeOpen && (
         <div className={styles.modalBox}>
           <div className={styles.makeModal}>
-            <h3>VIBE IDE 생성</h3>
+            <h3 className={styles.modalTitle}>VIBE IDE 생성</h3>
 
-            <form onSubmit={onSubmit}>
-              <input type="checkbox" />
+            <form onSubmit={onSubmitMake}>
+              <label className={styles.checkBox}>
+                <input type="checkbox" checked={checked} onChange={onChangeCheck} />
+                비공개
+              </label>
 
               <input
                 type="text"
                 className={styles.inputBox}
+                ref={titleRef}
                 value={title}
                 onChange={onChangeTitle}
                 placeholder="제목"
-                required
               />
 
-              <select className={styles.inputSelect}>
+              <select
+                className={styles.inputSelect}
+                ref={languageRef}
+                value={languageValue}
+                onChange={onChangeLanguage}
+              >
+                <option value="">언어 선택</option>
                 {languages.map((language, idx) => (
                   <option value={language[0]} key={idx}>
                     {language[0]}
@@ -194,7 +312,7 @@ export default function MainPage() {
                 ))}
               </select>
 
-              <select className={styles.inputSelect}>
+              <select className={styles.inputSelect} ref={maxRef}>
                 {maxUsers.map((count, idx) => (
                   <option value={count} key={idx}>
                     {count}
@@ -202,18 +320,54 @@ export default function MainPage() {
                 ))}
               </select>
 
+              {checked && (
+                <input
+                  type="text"
+                  className={styles.inputBox}
+                  ref={pwRef}
+                  value={password}
+                  onChange={onChangePassword}
+                  maxLength="4"
+                  placeholder="패스워드 입력 (4글자 숫자만 가능합니다)"
+                />
+              )}
+
+              <div className={styles.btnBox}>
+                <button className={styles.cancel} onClick={() => onClickCancel('make')}>
+                  취소
+                </button>
+                <button type="submit" className={styles.confirm}>
+                  확인
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {isPrivateOpen && (
+        <div className={styles.modalBox}>
+          <div className={styles.makeModal}>
+            <h3 className={styles.privatTitle}>{privateRoom.title} - 패스워드</h3>
+
+            <form onSubmit={onSubmitPrivate}>
               <input
                 type="text"
                 className={styles.inputBox}
-                value={password}
-                onChange={onChangePassword}
+                ref={pwConfirm}
+                value={privatePassword}
+                onChange={onChangePrivatePassword}
                 maxLength="4"
-                placeholder="패스워드 입력 (최대 4글자)"
+                placeholder="패스워드 입력 (4글자 숫자만 가능합니다)"
               />
 
               <div className={styles.btnBox}>
-                <button onClick={onClickCancel}>취소</button>
-                <button>확인</button>
+                <button className={styles.cancel} onClick={() => onClickCancel('private')}>
+                  취소
+                </button>
+                <button type="submit" className={styles.confirm}>
+                  확인
+                </button>
               </div>
             </form>
           </div>
