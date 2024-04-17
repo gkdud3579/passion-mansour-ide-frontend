@@ -6,7 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "64m"
   labels:
     app.kubernetes.io/managed-by: kargocd
-  name: krampoline
+  name: passion-mansour-ide-frontend
   namespace: default
 spec:
   rules:
