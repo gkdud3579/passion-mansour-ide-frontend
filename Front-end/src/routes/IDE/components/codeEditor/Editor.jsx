@@ -1,39 +1,38 @@
-import { useState } from "react";
-import MonacoEditor from "@monaco-editor/react";
-import styles from "./Editor.module.css";
-import LanguageSelector from "./LanguageSelector";
+import { useState, useRef } from 'react';
+import MonacoEditor from '@monaco-editor/react';
+import styles from './Editor.module.css';
+import LanguageSelector from './LanguageSelector';
+import { Box } from '@chakra-ui/react';
+import { CODE_SNIPPETS } from '../../Constants';
 
 const Editor = () => {
-  const [language, setLanguage] = useState("javascript");
+  const editorRef = useRef();
+  const [value, setValue] = useState('');
+  const [language, setLanguage] = useState('javascript');
 
-  const options = {
-    selectOnLineNumbers: true,
-    roundedSelection: false,
-    readOnly: false,
-    cursorStyle: "line",
-    automaticLayout: true,
+  const onMount = (editor) => {
+    editorRef.current = editor;
+    editor.focus();
   };
 
-  function handleLanguageSelect(lang) {
-    setLanguage(lang);
-  }
-
-  function onChange(newValue, e) {
-    console.log("onChange", newValue, e);
-  }
+  const onSelect = (language) => {
+    setLanguage(language);
+    setValue(CODE_SNIPPETS[language]);
+  };
 
   return (
-    <div className={styles.container}>
-      <LanguageSelector language={language} onSelect={handleLanguageSelect} />
+    <Box className={styles.container}>
+      <LanguageSelector language={language} onSelect={onSelect} />
       <MonacoEditor
         height="100%"
-        language={language}
         theme="vs-light"
-        value={"// 여기에 코드를 작성하세요"}
-        options={options}
-        onChange={onChange}
+        language={language}
+        defaultValue={CODE_SNIPPETS[language]}
+        onMount={onMount}
+        value={value}
+        onChange={(value) => setValue(value)}
       />
-    </div>
+    </Box>
   );
 };
 
