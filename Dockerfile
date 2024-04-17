@@ -20,4 +20,4 @@ RUN yarn build
 EXPOSE 3000
 
 # Serve the app using `vite preview` (Consider using a more robust server for production)
-CMD ["yarn", "preview"]
+CMD ["yarn", "preview", "--host"]
