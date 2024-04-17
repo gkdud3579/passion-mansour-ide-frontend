@@ -50,11 +50,6 @@
   border-radius: 5px;
 }
 
-.emailContainer {
-  display: flex;
-  justify-content: space-between;
-}
-
 .inputFieldEmail {
   flex-grow: 1;
   margin-right: 10px;
@@ -78,7 +73,7 @@
   flex-direction: column;
   width: 100%;
   max-width: 500px;
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
 .dropdown {

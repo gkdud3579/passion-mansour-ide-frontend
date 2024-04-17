@@ -20,13 +20,10 @@ export default function Mypage() {
 
         <div className={styles.infoSection}>
           <h4 className={styles.infoTitle}>개인정보 설정</h4>
+          <input type="text" placeholder="이름" className={styles.inputField} />
           <input type="text" placeholder="닉네임" className={styles.inputField} />
           <input type="text" placeholder="비밀번호" className={styles.inputField} />
           <input type="text" placeholder="비밀번호 확인" className={styles.inputField} />
-          <div className={styles.emailContainer}>
-            <input type="text" placeholder="이메일" className={styles.inputField} />
-            <button className={styles.sendButton}>전송</button>
-          </div>
         </div>
 
         <div className={styles.settingsSection}>
@@ -34,10 +31,6 @@ export default function Mypage() {
           <select className={styles.dropdown}>
             <option value="light">Light</option>
             <option value="dark">Dark</option>
-          </select>
-          <select className={styles.dropdown}>
-            <option value="Java">Java</option>
-            <option value="JavaScript">JavaScript</option>
           </select>
         </div>
 
