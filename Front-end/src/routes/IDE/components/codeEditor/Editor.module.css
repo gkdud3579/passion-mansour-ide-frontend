@@ -6,12 +6,6 @@
     background: #FAFAFA;
   }
   
-  /* .languageSelector {
-    padding: 5px 10px;
-    border-bottom: 1px solid #ccc;
-    z-index: 1;
-  } */
-  
   .ontainer .monacoEditor {
     flex: 1;
     width: 100%;

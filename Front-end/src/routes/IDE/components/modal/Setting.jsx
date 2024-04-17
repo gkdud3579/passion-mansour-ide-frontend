@@ -3,11 +3,11 @@ import styles from './Setting.module.css';
 
 const Setting = ({ onClose }) => {
   const [selectedValue, setSelectedValue] = useState('light');
-  const [users, setUsers] = useState([
-    { name: 'Alexander', role: 'Admin' },
-    { name: 'Jessica', role: 'Developer' },
-    { name: 'David', role: 'Designer' },
-  ]);
+  // const [users, setUsers] = useState([
+  //   { name: 'Alexander', role: 'Admin' },
+  //   { name: 'Jessica', role: 'Developer' },
+  //   { name: 'David', role: 'Designer' },
+  // ]);
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -24,7 +24,7 @@ const Setting = ({ onClose }) => {
             <option value="dark">Dark</option>
           </select>
         </div>
-        <div className={styles.dropdownContainer}>
+        {/* <div className={styles.dropdownContainer}>
           <span className={styles.authorizationTitle}>권한</span>
           <div className={styles.userList}>
             <ul>
@@ -34,13 +34,12 @@ const Setting = ({ onClose }) => {
                   <select className={styles.authorization} value={selectedValue} onChange={handleChange}>
                     <option value="master">master</option>
                     <option value="읽기">읽기</option>
-                    <option value="읽기/편집">읽기/편집</option>
                   </select>
                 </li>
               ))}
             </ul>
           </div>
-        </div>
+        </div> */}
         <div className={styles.buttonContainer}>
           <button onClick={onClose} className={styles.closeButton}>
             취소

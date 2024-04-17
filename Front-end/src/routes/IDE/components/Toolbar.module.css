@@ -58,10 +58,10 @@
 
 .rightButtons {
   display: flex;
+  gap: 15px;
 }
 
 .rightButtons button {
-  margin-left: 8px;
   background: none;
   border: none;
   cursor: pointer;

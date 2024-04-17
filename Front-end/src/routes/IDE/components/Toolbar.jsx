@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from './Toolbar.module.css';
 import Setting from './modal/Setting';
+import { CommentIcon, ExitIcon, PlayIcon, SaveIcon, SettingIcon } from '../../../components/Icons';
 
 const Toolbar = ({ onChatToggle }) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -11,7 +12,7 @@ const Toolbar = ({ onChatToggle }) => {
   return (
     <div className={styles.container}>
       <div className={styles.leftButtons}>
-        <button className={styles.exitButton}>나가기</button>
+        <button className={styles.exitButton}><ExitIcon size={20} /></button>
         <div className={styles.status}>
           <span>공개</span>
           <span>JavaScript</span>
@@ -20,10 +21,10 @@ const Toolbar = ({ onChatToggle }) => {
         <span className={styles.title}>백준 레벨 1 문제 1 문제 풀이합니다.</span>
       </div>
       <div className={styles.rightButtons}>
-        <button onClick={onChatToggle}>채팅</button>
-        <button>저장</button>
-        <button>재생</button>
-        <button onClick={toggleSettings}>환경설정</button>
+        <button onClick={onChatToggle}><CommentIcon size={20} /></button>
+        <button><SaveIcon size={20} /></button>
+        <button><PlayIcon size={20} /></button>
+        <button onClick={toggleSettings}><SettingIcon size={20} /></button>
         {isSettingsOpen && <Setting onClose={toggleSettings} />}
       </div>
     </div>

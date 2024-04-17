@@ -3,6 +3,7 @@ import styles from './Chatting.module.css';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { SearchIcon } from '../../../../components/Icons';
 
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
@@ -58,7 +59,7 @@ const Chatting = () => {
       <header className={styles.chatHeader}>
         <span>Live Chat</span>
         <div className={styles.chatFunction}>
-          <button>검색</button>
+          <button><SearchIcon size={20} /></button>
           <div>4</div>
         </div>
       </header>
