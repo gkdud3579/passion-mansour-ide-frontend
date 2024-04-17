@@ -12,10 +12,8 @@ spec:
   rules:
     - http:
         paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: passion-mansour-ide-frontend
-                port:
-                  number: 3000
+          - backend:
+              serviceName: passion-mansour-ide-frontend
+              servicePort: 3000
+              path: /
+              pathType: Prefix
