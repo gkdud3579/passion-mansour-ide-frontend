@@ -3,24 +3,11 @@ import styles from './Login.module.css';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Icons';
+import useInput from '../../hooks/userInput';
 
 const LoginPage = () => {
-  const [userId, setUserId] = useState('');
-  const [userPw, setUserPw] = useState('');
-
-  const userIdChange = useCallback(
-    (e) => {
-      setUserId(e.target.value);
-    },
-    [userId],
-  );
-
-  const userPwChange = useCallback(
-    (e) => {
-      setUserPw(e.target.value);
-    },
-    [userPw],
-  );
+  const [userId, userIdChange] = useInput('');
+  const [userPw, userPwChange] = useInput('');
 
   const onSubmit = useCallback(
     (e) => {
@@ -65,7 +52,7 @@ const LoginPage = () => {
           required
         />
 
-        <button type="submit" className={styles.buttonBox}>
+        <button type="submit" className={styles.buttonBox} disabled={userId === '' || userPw === '' ? true : false}>
           로그인
         </button>
       </form>

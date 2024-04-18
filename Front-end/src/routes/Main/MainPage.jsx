@@ -8,7 +8,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ko';
 import { Link, useNavigate } from 'react-router-dom';
 import { LANGUAGE_VERSIONS } from '../IDE/Constants';
-import { CommentIcon, ExitIcon } from '../../components/Icons';
 
 dayjs.locale('ko');
 dayjs.extend(relativeTime);
@@ -67,6 +66,7 @@ export default function MainPage() {
   const [privateRoom, setPrivateRoom] = useState({ id: 0, title: '', pw: '' });
   const [checked, setChecked] = useState(false);
   const [languageValue, setLanguageValue] = useState('');
+  const [maxValue, setMaxValue] = useState('');
   const [isMakeOpen, setIsMakeOpen] = useState(false);
   const [isPrivateOpen, setIsPrivateOpen] = useState(false);
 
@@ -83,7 +83,9 @@ export default function MainPage() {
     setTitle(e.target.value);
   }, []);
 
+  // 생성 - 비밀번호 입력
   const onChangePassword = useCallback((e) => {
+    pwRef.current.style.borderColor = '#d5d5d5';
     const value = Number(e.target.value);
     if (isNaN(value)) return;
     setPassword(String(value));
@@ -113,13 +115,20 @@ export default function MainPage() {
     setLanguageValue(e.target.value);
   }, []);
 
+  const onChangeMax = useCallback((e) => {
+    maxRef.current.style.borderColor = '#d5d5d5';
+    setMaxValue(e.target.value);
+  }, []);
+
   const onFilter = useCallback(() => {}, []);
 
+  // 비공개 체크
   const onChangeCheck = useCallback(() => {
     setPassword('');
     setChecked(!checked);
   }, [checked]);
 
+  // 비공개 비밀번호 모달창 열기
   const onClickPriviateOpen = useCallback(
     (state, id, title, pw) => {
       setPrivatePassword('');
@@ -141,6 +150,7 @@ export default function MainPage() {
 
       if (title === '') {
         titleRef.current.style.borderColor = '#f00';
+        titleRef.current.focus();
         return false;
       }
 
@@ -149,26 +159,29 @@ export default function MainPage() {
         return false;
       }
 
-      if (maxRef === '') {
+      if (maxValue === '') {
         maxRef.current.style.borderColor = '#f00';
         return false;
       }
 
-      if (checked && languageValue.length > 4) {
+      if (checked && password.length !== 4) {
         pwRef.current.style.borderColor = '#f00';
+        pwRef.current.focus();
         return false;
       }
 
       const roomInfo = {
+        private: checked,
         title,
         password,
         language: languageValue,
+        maxUser: maxValue,
       };
 
       console.log(roomInfo);
       console.log('make success!!');
     },
-    [title, password, languageValue, checked],
+    [title, password, languageValue, maxValue, checked],
   );
 
   const onSubmitPrivate = useCallback(
@@ -226,8 +239,13 @@ export default function MainPage() {
           </div>
 
           {posts.length === 0 ? (
-            <div>
-              <p>생성도</p>
+            <div className={styles.notPostBox}>
+              <p className={styles.notPostTitle}>생성된 IDE가 없습니다.</p>
+              <span className={styles.notPostMsg}>
+                우측 상단에 ‘VIBE IDE 생성' 버튼을 클릭하여
+                <br />
+                VIBE IDE를 실행해보세요
+              </span>
             </div>
           ) : (
             <>
@@ -312,7 +330,8 @@ export default function MainPage() {
                 ))}
               </select>
 
-              <select className={styles.inputSelect} ref={maxRef}>
+              <select className={styles.inputSelect} ref={maxRef} value={maxValue} onChange={onChangeMax}>
+                <option value="">인원 선택</option>
                 {maxUsers.map((count, idx) => (
                   <option value={count} key={idx}>
                     {count}
