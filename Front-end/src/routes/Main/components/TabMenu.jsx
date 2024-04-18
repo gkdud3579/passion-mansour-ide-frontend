@@ -1,11 +1,18 @@
-const TabMenu = ({ tab }) => {
-  if (tab === 0) {
-    return <div>Tab 1 내용입니다.</div>;
-  } else if (tab.클릭된탭 === 1) {
-    return <div>Tab 2 내용입니다.</div>;
-  } else if (tab.클릭된탭 === 2) {
-    return <div>Tab 3 내용입니다.</div>;
-  }
+import styles from './TabMenu.module.css';
+
+const TabMenu = ({ tabIndex, setTabIndex }) => {
+  return (
+    <nav className={styles.nav}>
+      <ul className={styles.navBox}>
+        <li onClick={() => setTabIndex(0)} className={`${tabIndex === 0 ? styles.tabActive : styles.tabButton}`}>
+          진행중
+        </li>
+        <li onClick={() => setTabIndex(1)} className={`${tabIndex === 1 ? styles.tabActive : styles.tabButton}`}>
+          종료
+        </li>
+      </ul>
+    </nav>
+  );
 };
 
 export default TabMenu;
