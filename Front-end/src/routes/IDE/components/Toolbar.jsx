@@ -1,15 +1,10 @@
 import { useMutation } from 'react-query';
-import { saveFileContent } from '../api';
+import { playFileContent, saveFileContent } from '../api';
 import styles from './Toolbar.module.css';
 import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/Icons';
 
-const Toolbar = ({ state, onChatToggle, onRunCode, isRunning, editorRef, projectId, language }) => {
-  const {
-    mutate: saveContent,
-    isLoading,
-    isError,
-    error,
-  } = useMutation(saveFileContent, {
+const Toolbar = ({ state, onChatToggle, projectId, language, fileContent, file }) => {
+  const { mutate: saveContent, isLoading: isSavingLoading } = useMutation(saveFileContent, {
     onSuccess: (data) => {
       console.log('Save successful:', data);
       alert('Save successful!');
@@ -20,11 +15,28 @@ const Toolbar = ({ state, onChatToggle, onRunCode, isRunning, editorRef, project
     },
   });
 
+  const { mutate: playContent, isLoading: isPlayingLoading } = useMutation(playFileContent, {
+    onSuccess: (data) => {
+      console.log('Play successful:', data);
+      onPlaySuccess(data);
+      alert('Play successful!');
+    },
+    onError: (error) => {
+      console.error('Error playing file:', error);
+      alert('Error playing file: ' + error.message);
+    },
+  });
+
   const handleSave = () => {
     // const fileContent = editorRef.current.getValue();
-    // console.log('Sending data to server:', { projectId, language, fileContent }); 
-    // saveContent({ projectId, language, fileContent });
+    // console.log('Sending data to server:', { projectId, language, fileContent });
     console.log(state);
+    saveContent({ projectId, language, fileContent });
+  };
+
+  const handlePlay = () => {
+    console.log(state);
+    playContent({ projectId, language, file });
   };
 
   return (
@@ -44,10 +56,10 @@ const Toolbar = ({ state, onChatToggle, onRunCode, isRunning, editorRef, project
         <button onClick={onChatToggle}>
           <CommentIcon size={20} />
         </button>
-        <button onClick={handleSave} disabled={isLoading}>
+        <button onClick={handleSave} disabled={isSavingLoading}>
           <SaveIcon size={20} />
         </button>
-        <button>
+        <button onClick={handlePlay} disabled={isPlayingLoading}>
           <PlayIcon size={20} />
         </button>
       </div>
