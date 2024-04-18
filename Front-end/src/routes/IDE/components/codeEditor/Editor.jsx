@@ -1,23 +1,15 @@
-import { useState, useRef } from 'react';
-import MonacoEditor from '@monaco-editor/react';
-import styles from './Editor.module.css';
-import LanguageSelector from './LanguageSelector';
-import { Box } from '@chakra-ui/react';
-import { CODE_SNIPPETS } from '../../Constants';
-
-const Editor = () => {
-  const editorRef = useRef();
-  const [value, setValue] = useState('');
-  const [language, setLanguage] = useState('javascript');
-
-  const onMount = (editor) => {
-    editorRef.current = editor;
-    editor.focus();
-  };
-
-  const onSelect = (language) => {
-    setLanguage(language);
-    setValue(CODE_SNIPPETS[language]);
+import React, { useState } from "react";
+import MonacoEditor from "@monaco-editor/react";
+import styles from "./Editor.module.css";
+import LanguageSelector from "./LanguageSelector";
+import { Box } from "@chakra-ui/react";
+import { CODE_SNIPPETS } from "../../Constants";
+const Editor = ({ state, setState }) => {
+  const [language, setLanguage] = useState("javascript");
+  const onSelect = (lang) => {
+    setLanguage(lang);
+    setState({...state, fileContent:(CODE_SNIPPETS[language])})
+    setState({...state, language: language});
   };
 
   return (
@@ -27,13 +19,13 @@ const Editor = () => {
         height="100%"
         theme="vs-light"
         language={language}
+        value={state.fileContent}
         defaultValue={CODE_SNIPPETS[language]}
-        onMount={onMount}
-        value={value}
-        onChange={(value) => setValue(value)}
+        onChange={(newValue) => {
+          setState({...state, fileContent: newValue})
+        }}
       />
     </Box>
   );
 };
-
 export default Editor;

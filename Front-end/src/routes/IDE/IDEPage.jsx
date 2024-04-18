@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { useState, useRef } from 'react';
 import Editor from './components/codeEditor/Editor';
 import Toolbar from './components/Toolbar';
@@ -8,13 +9,16 @@ import styles from './IDEPage.module.css';
 import { executeCode } from './api';
 
 const IDEPage = () => {
+  const queryClient = new QueryClient();
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [output, setOutput] = useState(''); // 추가: 코드 실행 결과를 저장
   const [isRunning, setIsRunning] = useState(false); // 추가: 코드 실행 상태
-  const editorRef = useRef(null); // 추가: Editor 참조
+  // const editorRef = useRef(null);
+  const [state, setState] = useState({language:"javascript" , fileContent:""})
 
   const runCode = async () => {
-    const sourceCode = editorRef.current.getValue();
+    // const sourceCode = editorRef.current.getValue();
+    const sourceCode = state.fileContent
     setIsRunning(true);
     try {
       const result = await executeCode('javascript', sourceCode); // 언어와 소스코드를 인자로 넘깁니다.
@@ -28,16 +32,18 @@ const IDEPage = () => {
   const toggleChat = () => setIsChatVisible(!isChatVisible);
 
   return (
-    <ChakraProvider>
-      <div className={styles.page}>
-        <Toolbar onChatToggle={toggleChat} isRunning={isRunning} onRunCode={runCode} />
-        <div className={styles.main}>
-          <Editor ref={editorRef} className={styles.editorContainer} />
-          <Output output={output} className={styles.outputContainer} />
-          {isChatVisible && <Chatting />}
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider>
+        <div className={styles.page}>
+          <Toolbar state={state} onChatToggle={toggleChat} isRunning={isRunning} onRunCode={runCode} />
+          <div className={styles.main}>
+            <Editor state={state} setState={setState} className={styles.editorContainer} />
+            <Output output={output} className={styles.outputContainer} />
+            {isChatVisible && <Chatting />}
+          </div>
         </div>
-      </div>
-    </ChakraProvider>
+      </ChakraProvider>
+    </QueryClientProvider>
   );
 };
 

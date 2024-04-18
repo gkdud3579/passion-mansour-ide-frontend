@@ -1,12 +1,30 @@
-import { useState } from 'react';
+import { useMutation } from 'react-query';
+import { saveFileContent } from '../api';
 import styles from './Toolbar.module.css';
-import Setting from './modal/Setting';
-import { CommentIcon, ExitIcon, PlayIcon, SaveIcon, SettingIcon } from '../../../components/Icons';
+import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/Icons';
 
-const Toolbar = ({ onChatToggle, onRunCode, isRunning }) => {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const toggleSettings = () => {
-    setIsSettingsOpen(!isSettingsOpen);
+const Toolbar = ({ state, onChatToggle, onRunCode, isRunning, editorRef, projectId, language }) => {
+  const {
+    mutate: saveContent,
+    isLoading,
+    isError,
+    error,
+  } = useMutation(saveFileContent, {
+    onSuccess: (data) => {
+      console.log('Save successful:', data);
+      alert('Save successful!');
+    },
+    onError: (error) => {
+      console.error('Error saving file:', error);
+      alert('Error saving file: ' + error.message);
+    },
+  });
+
+  const handleSave = () => {
+    // const fileContent = editorRef.current.getValue();
+    // console.log('Sending data to server:', { projectId, language, fileContent }); 
+    // saveContent({ projectId, language, fileContent });
+    console.log(state);
   };
 
   return (
@@ -26,16 +44,12 @@ const Toolbar = ({ onChatToggle, onRunCode, isRunning }) => {
         <button onClick={onChatToggle}>
           <CommentIcon size={20} />
         </button>
-        <button>
+        <button onClick={handleSave} disabled={isLoading}>
           <SaveIcon size={20} />
         </button>
-        <button disabled={isRunning} onClick={onRunCode}>
+        <button>
           <PlayIcon size={20} />
         </button>
-        <button onClick={toggleSettings}>
-          <SettingIcon size={20} />
-        </button>
-        {isSettingsOpen && <Setting onClose={toggleSettings} />}
       </div>
     </div>
   );
