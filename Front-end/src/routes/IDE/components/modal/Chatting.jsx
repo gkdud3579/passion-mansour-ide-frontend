@@ -1,37 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Stomp from 'webstomp-client';
 import styles from './Chatting.module.css';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { SearchIcon } from '../../../../components/Icons';
 
+
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
 
+let stompClient = null;
+
 const Chatting = () => {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: '안녕하세요.',
-      user: {
-        name: '고영희',
-        avatar: 'img/sample.png',
-      },
-      timestamp: dayjs().fromNow(),
-      isOwn: false,
-    },
-    {
-      id: 2,
-      text: '안녕하세요.',
-      timestamp: dayjs().fromNow(),
-      user: {
-        name: '사용자 이름',
-        // avatar: '프로필 사진 URL',
-      },
-      isOwn: true,
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+
+  useEffect(() => {
+    const socket = new WebSocket('http://localhost:7382/websocket');
+    stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function(frame) {
+      stompClient.subscribe('/topic/messages', function(message) {
+        const msg = JSON.parse(message.body);
+        setMessages(messages => [...messages, msg]);
+      });
+    });
+
+    return () => {
+      if (stompClient !== null) {
+        stompClient.disconnect();
+      }
+    };
+  }, []);
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
@@ -40,16 +41,14 @@ const Chatting = () => {
   const handleSendClick = () => {
     if (input.trim()) {
       const newMessage = {
-        id: messages.length + 1,
         text: input,
+        user: { name: '나' },
         timestamp: new Date().toISOString(),
-        user: {
-          name: '나',
-          avatar: '/myavatar.png',
-        },
-        isOwn: true,
+        isOwn: true
       };
-      setMessages([...messages, newMessage]);
+      if (stompClient) {
+        stompClient.send("/app/chat.send", JSON.stringify(newMessage), {});
+      }
       setInput('');
     }
   };
