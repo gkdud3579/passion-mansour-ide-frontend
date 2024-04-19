@@ -3,7 +3,7 @@ import { playFileContent, saveFileContent } from '../api';
 import styles from './Toolbar.module.css';
 import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/Icons';
 
-const Toolbar = ({ state, onChatToggle, projectId, language, fileContent, file }) => {
+const Toolbar = ({ onPlaySuccess, state, onChatToggle, projectId, language, fileContent, file }) => {
   const { mutate: saveContent, isLoading: isSavingLoading } = useMutation(saveFileContent, {
     onSuccess: (data) => {
       console.log('Save successful:', data);
