@@ -10,4 +10,7 @@ export default defineConfig({
   preview: {
     port: 3000, // preview 포트
   },
+  define: {
+    global: 'window',
+  },
 });

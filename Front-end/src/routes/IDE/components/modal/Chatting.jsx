@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
+import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import styles from './Chatting.module.css';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { SearchIcon } from '../../../../components/Icons';
-
 
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
@@ -17,17 +17,21 @@ const Chatting = () => {
   const [input, setInput] = useState('');
 
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:7382/websocket'); // https 사용시 'wss://'로 시작해야 합니다.
+    const socket = new SockJS('http://localhost:7382/websocket'); // https 사용시 'wss://'로 시작해야 합니다.
     stompClient = Stomp.over(socket);
 
-    stompClient.connect({}, function(frame) {
-      stompClient.subscribe('/topic/messages', function(message) {
-        const msg = JSON.parse(message.body);
-        setMessages(messages => [...messages, msg]);
-      });
-    }, function(error) {
-      console.log('Connection error: ', error);
-    });
+    stompClient.connect(
+      {},
+      function (frame) {
+        stompClient.subscribe('/topic/messages', function (message) {
+          const msg = JSON.parse(sdkEvent.body);
+          setMessages((messages) => [...messages, msg]);
+        });
+      },
+      function (error) {
+        console.log('Connection error: ', error);
+      },
+    );
 
     return () => {
       if (stompClient && stompClient.connected) {
@@ -48,13 +52,13 @@ const Chatting = () => {
         text: input,
         user: { name: '나' },
         timestamp: new Date().toISOString(),
-        isOwn: true
+        isOwn: true,
       };
       if (stompClient && stompClient.connected) {
-        stompClient.send("/app/chat.send", JSON.stringify(newMessage), {});
+        stompClient.send('/app/chat.send', JSON.stringify(newMessage), {});
         setInput('');
       } else {
-        console.log("WebSocket is not connected.");
+        console.log('WebSocket is not connected.');
       }
     }
   };
@@ -64,7 +68,9 @@ const Chatting = () => {
       <header className={styles.chatHeader}>
         <span>Live Chat</span>
         <div className={styles.chatFunction}>
-          <button><SearchIcon size={20} /></button>
+          <button>
+            <SearchIcon size={20} />
+          </button>
           <div>{messages.length}</div>
         </div>
       </header>
@@ -72,7 +78,11 @@ const Chatting = () => {
         {messages.map((message, index) => (
           <li key={index} className={message.isOwn ? styles.myMessage : styles.theirMessage}>
             {!message.isOwn && (
-              <img src={message.user.avatar || '/default_avatar.png'} alt={message.user.name} className={styles.profileImage} />
+              <img
+                src={message.user.avatar || '/default_avatar.png'}
+                alt={message.user.name}
+                className={styles.profileImage}
+              />
             )}
             <div className={styles.messageBubble}>
               <div className={styles.messageInfo}>
@@ -99,5 +109,4 @@ const Chatting = () => {
     </div>
   );
 };
-
 export default Chatting;
