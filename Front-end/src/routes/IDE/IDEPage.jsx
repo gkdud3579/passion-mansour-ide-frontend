@@ -1,5 +1,5 @@
+import { useState, useEffect, useRef } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { useState } from 'react';
 import Editor from './components/codeEditor/Editor';
 import Toolbar from './components/Toolbar';
 import Output from './components/codeEditor/Output';
@@ -7,14 +7,38 @@ import Chatting from './components/modal/Chatting';
 import { ChakraProvider } from '@chakra-ui/react';
 import styles from './IDEPage.module.css';
 import { executeCode } from './api';
+import SockJS from 'sockjs-client';
+import Stomp from 'webstomp-client';
 
 const IDEPage = () => {
   const queryClient = new QueryClient();
   const [isChatVisible, setIsChatVisible] = useState(false);
-  const [output, setOutput] = useState(''); // 추가: 코드 실행 결과를 저장
+  const [output, setOutput] = useState('');
+  const [currentUser] = useState({ id: 'user1', role: 'master' });  // user1 is the master
+  const stompClient = useRef(null);
+
+  useEffect(() => {
+    const socket = new SockJS('http://localhost:7382/websocket');
+    stompClient.current = Stomp.over(socket);
+    stompClient.current.connect(
+      {},
+      (frame) => {
+        console.log('Connected: ' + frame);
+      },
+      (error) => {
+        console.error('Connection error: ', error);
+      },
+    );
+
+    return () => {
+      if (stompClient.current && stompClient.current.connected) {
+        stompClient.current.disconnect();
+        console.log('Disconnected!');
+      }
+    };
+  }, []);
 
   const handlePlaySuccess = (data) => {
-    // 서버에서 받은 응답 내의 stdout을 출력 상태로 설정
     if (data.stdout) {
       setOutput(data.stdout);
     } else if (data.stderr) {
@@ -24,8 +48,7 @@ const IDEPage = () => {
     }
   };
 
-  const [isRunning, setIsRunning] = useState(false); // 추가: 코드 실행 상태
-  // const editorRef = useRef(null);
+  const [isRunning, setIsRunning] = useState(false);
   const [state, setState] = useState({
     language: 'javascript',
     fileContent: '',
@@ -36,11 +59,9 @@ const IDEPage = () => {
   });
 
   const runCode = async () => {
-    // const sourceCode = editorRef.current.getValue();
-    const sourceCode = state.fileContent;
     setIsRunning(true);
     try {
-      const result = await executeCode('javascript', sourceCode); // 언어와 소스코드를 인자로 넘깁니다.
+      const result = await executeCode(state.language, state.fileContent);
       setOutput(result.output);
     } catch (error) {
       console.error('Error executing code: ', error);
@@ -54,16 +75,10 @@ const IDEPage = () => {
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
         <div className={styles.page}>
-          <Toolbar
-            state={state}
-            onChatToggle={toggleChat}
-            isRunning={isRunning}
-            onRunCode={runCode}
-            onPlaySuccess={handlePlaySuccess}
-          />
+          <Toolbar state={state} onChatToggle={toggleChat} onPlaySuccess={handlePlaySuccess} projectId={"your-project-id"} />
           <div className={styles.main}>
-            <Editor state={state} setState={setState} className={styles.editorContainer} />
-            <Output output={output} className={styles.outputContainer} />
+            <Editor state={state} setState={setState} isMaster={currentUser.role === 'master'} />
+            <Output output={output} />
             {isChatVisible && <Chatting />}
           </div>
         </div>

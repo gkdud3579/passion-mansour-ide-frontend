@@ -5,7 +5,7 @@ import LanguageSelector from './LanguageSelector';
 import { Box } from '@chakra-ui/react';
 import { CODE_SNIPPETS } from '../../Constants';
 
-const Editor = ({ state, setState }) => {
+const Editor = ({ state, setState, isMaster }) => {
   const [language, setLanguage] = useState('javascript');
 
   const onSelect = (lang) => {
@@ -27,9 +27,10 @@ const Editor = ({ state, setState }) => {
       <MonacoEditor
         height="100%"
         theme="vs-light"
-        language={language}
+        language={state.language}
         value={state.fileContent}
         defaultValue={CODE_SNIPPETS[language]}
+        options={{ readOnly: !isMaster }}
         onChange={(newValue) => {
           setState({
             ...state,
