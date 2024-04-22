@@ -14,21 +14,50 @@ const IDEPage = () => {
   const queryClient = new QueryClient();
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [output, setOutput] = useState('');
-  const [currentUser] = useState({ id: 'user1', role: 'master' });  // user1 is the master
+  const [users, setUsers] = useState([
+    { id: 'user1', role: 'master' },
+    { id: 'user2', role: 'normal' },
+  ]);
+  const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const stompClient = useRef(null);
 
+  // 현재 활성 사용자 변경 (예시로 토글 방식 구현)
+  const toggleUser = () => {
+    setCurrentUserIndex((currentIndex) => (currentIndex + 1) % users.length);
+  };
+
   useEffect(() => {
-    const socket = new SockJS('http://localhost:7382/websocket');
-    stompClient.current = Stomp.over(socket);
-    stompClient.current.connect(
-      {},
-      (frame) => {
-        console.log('Connected: ' + frame);
-      },
-      (error) => {
-        console.error('Connection error: ', error);
-      },
-    );
+    const connectWebSocket = () => {
+      const socket = new SockJS('http://localhost:7382/websocket');
+      stompClient.current = Stomp.over(socket);
+      stompClient.current.connect({}, onConnected, onError);
+    };
+
+    const onConnected = (frame) => {
+      console.log('Connected: ' + frame);
+      stompClient.current.subscribe('/topic/code/1', onMessageReceived);
+    };
+
+    const onMessageReceived = (message) => {
+      const messageData = JSON.parse(message.body);
+      if (messageData.type === 'UPDATE_CODE' && users[currentUserIndex].role !== 'master') {
+        setState((prevState) => ({
+          ...prevState,
+          fileContent: messageData.fileContent,
+          file: {
+            name: prevState.file.name,
+            content: messageData.fileContent,
+          },
+        }));
+      }
+    };
+
+    const onError = (error) => {
+      console.error('Connection error: ', error);
+      setTimeout(connectWebSocket, 5000); // Try to reconnect every 5 seconds
+    };
+
+    connectWebSocket();
 
     return () => {
       if (stompClient.current && stompClient.current.connected) {
@@ -36,7 +65,7 @@ const IDEPage = () => {
         console.log('Disconnected!');
       }
     };
-  }, []);
+  }, [currentUserIndex]);
 
   const handlePlaySuccess = (data) => {
     if (data.stdout) {
@@ -75,9 +104,20 @@ const IDEPage = () => {
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
         <div className={styles.page}>
-          <Toolbar state={state} onChatToggle={toggleChat} onPlaySuccess={handlePlaySuccess} projectId={"your-project-id"} />
+          <Toolbar
+            state={state}
+            onChatToggle={toggleChat}
+            onPlaySuccess={handlePlaySuccess}
+            projectId="your-project-id"
+          />
           <div className={styles.main}>
-            <Editor state={state} setState={setState} isMaster={currentUser.role === 'master'} />
+            <Editor
+              state={state}
+              setState={setState}
+              isMaster={users[currentUserIndex].role === 'master'}
+              stompClient={stompClient} // Ensure this prop is being passed correctly
+            />
+
             <Output output={output} />
             {isChatVisible && <Chatting />}
           </div>

@@ -5,7 +5,7 @@ import LanguageSelector from './LanguageSelector';
 import { Box } from '@chakra-ui/react';
 import { CODE_SNIPPETS } from '../../Constants';
 
-const Editor = ({ state, setState, isMaster }) => {
+const Editor = ({ state, setState, isMaster, stompClient }) => {
   const [language, setLanguage] = useState('javascript');
 
   const onSelect = (lang) => {
@@ -21,6 +21,29 @@ const Editor = ({ state, setState, isMaster }) => {
     });
   };
 
+  const handleEditorChange = (newValue) => {
+    setState({
+      ...state,
+      fileContent: newValue,
+      file: {
+        ...state.file,
+        content: newValue,
+      },
+    });
+
+    // Send the new code to other users if the current user is the master
+    if (isMaster && stompClient && stompClient.current && stompClient.current.connected) {
+      stompClient.current.send(
+        'app/code/change/1',
+        JSON.stringify({
+          type: 'UPDATE_CODE',
+          fileContent: newValue,
+        }),
+        {},
+      );
+    }
+  };
+
   return (
     <Box className={styles.container}>
       <LanguageSelector language={language} onSelect={onSelect} />
@@ -31,18 +54,11 @@ const Editor = ({ state, setState, isMaster }) => {
         value={state.fileContent}
         defaultValue={CODE_SNIPPETS[language]}
         options={{ readOnly: !isMaster }}
-        onChange={(newValue) => {
-          setState({
-            ...state,
-            fileContent: newValue,
-            file: {
-              ...state.file,
-              content: newValue,
-            },
-          });
-        }}
+        onChange={handleEditorChange}
       />
+      {isMaster && <p>마스터 모드에서 편집 중입니다!</p>}
     </Box>
   );
 };
+
 export default Editor;
