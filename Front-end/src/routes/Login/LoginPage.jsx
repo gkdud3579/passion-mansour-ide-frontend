@@ -1,27 +1,57 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import styles from './Login.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Icons';
 import useInput from '../../hooks/userInput';
+import axios from 'axios';
 
 const LoginPage = () => {
   const [userId, userIdChange] = useInput('');
   const [userPw, userPwChange] = useInput('');
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem('access-token')) {
+      navigate('/main');
+    }
+  }, [navigate]);
+
   const onSubmit = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault();
 
-      const userInfo = {
-        id: userId,
-        password: userPw,
-      };
+      try {
+        // 로그인 요청에 필요한 사용자 정보
+        const userInfo = {
+          id: userId,
+          password: userPw,
+        };
 
-      console.log(userInfo);
-      console.log('로그인 완료');
+        // 로그인 요청 보내기 [ 임시 가짜 테스트 ]
+        const res = await axios.get(`http://localhost:4000/login/${userId}`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        // 토큰 저장
+        localStorage.setItem('access-token', 'test');
+
+        // 로그인 완료 메시지 출력
+        console.log(res.data);
+        console.log('login - usreInfo', userInfo);
+        console.log('로그인 완료');
+
+        // 로그인 성공 후 서비스 페이지로 이동
+        navigate('/main');
+      } catch (error) {
+        // 오류 처리
+        console.error('로그인 오류:', error);
+      }
     },
-    [userId, userPw],
+    [userId, userPw, navigate],
   );
 
   return (
@@ -34,7 +64,7 @@ const LoginPage = () => {
         <Logo size={264} />
       </div>
 
-      <form onSubmit={onSubmit} className={styles.fromDiv}>
+      <form onSubmit={onSubmit} className={styles.formDiv}>
         <input
           type="text"
           className={styles.inputBox}

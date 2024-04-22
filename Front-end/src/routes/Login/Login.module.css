@@ -13,7 +13,7 @@
   margin-bottom: 68px;
 }
 
-.fromDiv {
+.formDiv {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,10 +24,10 @@
   display: block;
   width: 100%;
   height: 72px;
-  border: 1px solid #d5d5d5;
+  border: 1px solid var(--border);
   border-radius: 5px;
-  background: #fff;
-  color: #000;
+  background: var(--input-bg);
+  color: var(--color);
   font-size: 20px;
   margin-bottom: 24px;
   padding: 6px 12px;
@@ -58,13 +58,13 @@
 
 .buttonBox[disabled] {
   pointer-events: none;
-  color: #7c7c7c;
-  background: #ececec;
+  color: var(--login-btn-color);
+  background: var(--login-btn);
 }
 
 .spanMsg {
   font-size: 14px;
-  color: #444;
+  color: var(--login-msg);
 }
 
 .linkMsg {

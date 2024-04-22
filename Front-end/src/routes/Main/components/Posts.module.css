@@ -91,7 +91,7 @@
   justify-content: space-between;
   align-items: center;
   width: calc(100% - 40px);
-  background: #fff;
+  background: var(--item-bg);
   margin-bottom: 24px;
   padding: 20px 22px;
   border-radius: 5px;
@@ -118,14 +118,14 @@
 }
 
 .itemTitle {
-  color: #000;
+  color: var(--item-title-color);
   font-size: 22px;
   font-weight: 500;
   margin: 6px 0 14px;
 }
 
 .itemBottomBox {
-  color: #444;
+  color: var(--item-sub-color);
   font-size: 12px;
   font-weight: 300;
 }

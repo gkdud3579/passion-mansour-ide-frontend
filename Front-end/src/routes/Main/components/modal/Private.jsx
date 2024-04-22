@@ -1,8 +1,10 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import styles from '../../MainPage.module.css';
 import { useNavigate } from 'react-router';
+import PrivateContext from '../../../../contexts/privateContext';
 
 const Private = ({ privateRoom, onClickCancel }) => {
+  const { setIsPrivate } = useContext(PrivateContext);
   const [privatePassword, setPrivatePassword] = useState('');
   const pwConfirmRef = useRef();
 
@@ -31,9 +33,10 @@ const Private = ({ privateRoom, onClickCancel }) => {
         return false;
       }
 
+      setIsPrivate(true);
       navigate(`/ide?id=${privateRoom.id}&private=${privateRoom.pw}`);
     },
-    [privatePassword, privateRoom, navigate],
+    [privatePassword, privateRoom, navigate, setIsPrivate],
   );
 
   return (

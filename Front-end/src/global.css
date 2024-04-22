@@ -2,6 +2,53 @@
 
 :root {
   --primary: #1d6feb;
+  --html-bg: #fafafa;
+  --color: #000;
+  --border: #d5d5d5;
+  --login-btn: #ececec;
+  --login-btn-color: #7c7c7c;
+  --login-msg: #444;
+  --input-bg: #fafafa;
+  --item-bg: #fff;
+  --item-title-color: #000;
+  --item-sub-color: #444;
+  --title-color: #000;
+  --gnb-menu-color: #000;
+  --logout-color: #000;
+  --nickname-color: #000;
+  --tab-color: #000;
+  --modal-bg: #fff;
+  --modal-title: #000;
+  --cancel-btn: #ccc;
+  --pw-bg: #f9f9f9;
+  --pw-text: #4c4c4c;
+}
+
+html.dark {
+  --html-bg: #242424;
+  --color: #fff;
+  --border: #444;
+  --login-btn: #444;
+  --login-btn-color: #aaa;
+  --login-msg: #c3c3c3;
+  --input-bg: #242424;
+  --item-bg: #343434;
+  --item-title-color: #fff;
+  --item-sub-color: #aaa;
+  --title-color: #fff;
+  --gnb-menu-color: #fff;
+  --logout-color: #fff;
+  --nickname-color: #fff;
+  --tab-color: #fff;
+  --modal-bg: #242424;
+  --modal-title: #fff;
+  --cancel-btn: #343434;
+  --pw-bg: #343434;
+  --pw-text: #ccc;
+}
+
+html.dark svg {
+  fill: #fff;
 }
 
 * {
@@ -11,8 +58,10 @@
 
 html,
 body {
+  width: 100dvw;
+  height: 100dvh;
   font-family: 'pretendard', 'sans-serif';
-  background: #fafafa;
+  background: var(--html-bg);
 }
 
 ul,

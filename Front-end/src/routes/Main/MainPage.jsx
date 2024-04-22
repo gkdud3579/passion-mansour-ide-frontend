@@ -8,6 +8,8 @@ import Post from './components/Post';
 import Private from './components/modal/Private';
 import Create from './components/modal/Create';
 import TabMenu from './components/TabMenu';
+import axios from 'axios';
+import api from '../../api/api';
 
 /* 더미 데이터 */
 const posts = [
@@ -79,10 +81,9 @@ const endPosts = [
 ];
 
 export default function MainPage() {
-  const [items, setItems] = useState(posts);
+  const [items, setItems] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
-  const [isMakeOpen, setIsMakeOpen] = useState(false);
-  const [isPrivateOpen, setIsPrivateOpen] = useState(false);
+  const [isModal, setIsModal] = useState({ isMake: false, isLock: false });
   const [privateRoom, setPrivateRoom] = useState({ id: 0, title: '', pw: '' });
 
   const navigate = useNavigate();
@@ -94,6 +95,13 @@ export default function MainPage() {
       setItems(posts);
     }
   }, [tabIndex]);
+
+  useEffect(() => {
+    api
+      .get('/posts')
+      .then((res) => setItems(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   const onFilter = useCallback(
     (e) => {
@@ -115,8 +123,8 @@ export default function MainPage() {
   );
 
   const onClickMakeOpen = useCallback(() => {
-    setIsMakeOpen(!isMakeOpen);
-  }, [isMakeOpen]);
+    setIsModal({ ...isModal, isMake: !isModal.isMake });
+  }, [isModal]);
 
   // 비공개 비밀번호 모달창 열기
   const onClickPriviateOpen = useCallback(
@@ -125,20 +133,20 @@ export default function MainPage() {
 
       if (state) {
         setPrivateRoom({ id, title, pw });
-        setIsPrivateOpen(!isPrivateOpen);
+        setIsModal({ ...isModal, isLock: !isModal.isLock });
       } else {
-        navigate(`/ide?id=${id}`);
+        navigate(`/ide/${id}`);
       }
     },
-    [isPrivateOpen, navigate],
+    [isModal, navigate],
   );
 
   const onClickCancel = useCallback(
     (state) => {
-      if (state === 'make') setIsMakeOpen(!isMakeOpen);
-      else if (state === 'private') setIsPrivateOpen(!isPrivateOpen);
+      if (state === 'make') setIsModal({ ...isModal, isMake: !isModal.isMake });
+      else if (state === 'private') setIsModal({ ...isModal, isLock: !isModal.isLock });
     },
-    [isMakeOpen, isPrivateOpen],
+    [isModal],
   );
 
   return (
@@ -216,8 +224,8 @@ export default function MainPage() {
         </div>
       </div>
 
-      {isMakeOpen && <Create onClickCancel={onClickCancel} />}
-      {isPrivateOpen && <Private privateRoom={privateRoom} onClickCancel={onClickCancel} />}
+      {isModal.isMake && <Create onClickCancel={onClickCancel} />}
+      {isModal.isLock && <Private privateRoom={privateRoom} onClickCancel={onClickCancel} />}
     </ServiceLayout>
   );
 }

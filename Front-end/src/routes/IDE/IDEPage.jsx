@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useState } from 'react';
-import Editor from './components/codeEditor/Editor';
+import Editor from './components/codeEditor/Editor';
 import Toolbar from './components/Toolbar';
-import Output from './components/codeEditor/Output';
+import Output from './components/codeEditor/Output';
 import Chatting from './components/modal/Chatting';
 import { ChakraProvider } from '@chakra-ui/react';
 import styles from './IDEPage.module.css';
@@ -54,7 +54,13 @@ const IDEPage = () => {
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
         <div className={styles.page}>
-          <Toolbar state={state} onChatToggle={toggleChat} isRunning={isRunning} onRunCode={runCode} onPlaySuccess={handlePlaySuccess} />
+          <Toolbar
+            state={state}
+            onChatToggle={toggleChat}
+            isRunning={isRunning}
+            onRunCode={runCode}
+            onPlaySuccess={handlePlaySuccess}
+          />
           <div className={styles.main}>
             <Editor state={state} setState={setState} className={styles.editorContainer} />
             <Output output={output} className={styles.outputContainer} />

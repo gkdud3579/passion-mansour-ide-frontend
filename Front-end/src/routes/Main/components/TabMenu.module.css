@@ -2,7 +2,7 @@
   display: flex;
   width: 100%;
   margin-bottom: 30px;
-  border-bottom: 1px solid #d5d5d5;
+  border-bottom: 1px solid var(--border);
 }
 
 .navBox {
@@ -22,14 +22,7 @@
 }
 
 .tabActive {
-  display: block;
-  position: relative;
-  color: #000;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1.2;
-  padding: 16px 12px;
-  cursor: pointer;
+  color: var(--tab-color);
 }
 
 .tabActive::before {

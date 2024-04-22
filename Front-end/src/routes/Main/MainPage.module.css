@@ -21,7 +21,7 @@
 }
 
 .title {
-  color: #000;
+  color: var(--title-color);
   font-size: 44px;
   font-weight: 700;
 }
@@ -42,7 +42,7 @@
   width: 100%;
   margin-bottom: 30px;
   padding: 8px 0;
-  border-bottom: 1px solid #d5d5d5;
+  border-bottom: 1px solid var(--border);
 }
 
 .navBox {
@@ -59,6 +59,7 @@
 }
 
 .infoMsg {
+  color: var(--color);
   font-size: 18px;
   font-weight: 500;
 }
@@ -73,11 +74,12 @@
   display: block;
   width: 112px;
   height: 54px;
-  color: #000;
+  color: var(--color);
   font-size: 16px;
   font-weight: 400;
   padding: 0 14px;
-  border: 1px solid #d5d5d5;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
   border-radius: 5px;
 }
 
@@ -91,7 +93,7 @@
   justify-content: space-between;
   align-items: center;
   width: calc(100% - 40px);
-  background: #fff;
+  background: var(--item-bg);
   margin-bottom: 24px;
   padding: 20px 22px;
   border-radius: 5px;
@@ -118,14 +120,14 @@
 }
 
 .itemTitle {
-  color: #000;
+  color: var(--item-title-color);
   font-size: 22px;
   font-weight: 500;
   margin: 6px 0 14px;
 }
 
 .itemBottomBox {
-  color: #444;
+  color: var(--item-sub-color);
   font-size: 12px;
   font-weight: 300;
 }
@@ -195,11 +197,11 @@
   width: 800px;
   padding: 64px 52px;
   border-radius: 10px;
-  background: #fff;
+  background: var(--modal-bg);
 }
 
 .modalTitle {
-  color: #000;
+  color: var(--modal-title);
   font-size: 32px;
   font-weight: 800;
   margin-bottom: 56px;
@@ -208,6 +210,7 @@
 .checkBox {
   display: inline-block;
   margin-bottom: 24px;
+  color: var(--color);
 }
 
 .checkBox input[type='checkbox'] {
@@ -219,10 +222,10 @@
   display: block;
   width: 100%;
   height: 72px;
-  border: 1px solid #d5d5d5;
+  border: 1px solid var(--border);
   border-radius: 5px;
-  background: #fff;
-  color: #000;
+  background: var(--input-bg);
+  color: var(--color);
   font-size: 20px;
   margin-bottom: 24px;
   padding: 6px 12px;
@@ -233,10 +236,10 @@
   display: block;
   width: 100%;
   height: 72px;
-  border: 1px solid #d5d5d5;
+  border: 1px solid var(--border);
   border-radius: 5px;
-  background: #fff;
-  color: #000;
+  background: var(--input-bg);
+  color: var(--color);
   font-size: 20px;
   margin-bottom: 24px;
   padding: 0 12px;
@@ -244,7 +247,7 @@
 }
 
 .privatTitle {
-  color: #000;
+  color: var(--title-color);
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 34px;
@@ -267,7 +270,7 @@
   font-size: 16px;
   font-weight: 600;
   border: none;
-  background: #ccc;
+  background: var(--cancel-btn);
   border-radius: 5px;
   margin-right: 16px;
   cursor: pointer;
