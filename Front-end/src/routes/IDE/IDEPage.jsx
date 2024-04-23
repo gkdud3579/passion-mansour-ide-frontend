@@ -9,18 +9,23 @@ import styles from './IDEPage.module.css';
 import { executeCode } from './api';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
+import { getPrject } from '../../api/serviceApi';
+import { useParams } from 'react-router-dom';
+// /ide/2
 
 const IDEPage = () => {
   const queryClient = new QueryClient();
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [output, setOutput] = useState('');
+  const [projectData, setProjectData] = useState({});
+  const { data } = useParams();
   const [users, setUsers] = useState([
     { id: 'user1', role: 'master' },
     { id: 'user2', role: 'normal' },
   ]);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const stompClient = useRef(null);
-
+  // project 정보
   // 현재 활성 사용자 변경 (예시로 토글 방식 구현)
   const toggleUser = () => {
     setCurrentUserIndex((currentIndex) => (currentIndex + 1) % users.length);
@@ -57,6 +62,18 @@ const IDEPage = () => {
       setTimeout(connectWebSocket, 5000); // Try to reconnect every 5 seconds
     };
 
+    // API 연동 - 24.04.24 12:30 추가 // 일단 실패가 뜨니 오류 뜰 때 더미 데이터 넣어두었습니다
+    getPrject(data)
+      .then((res) => setProjectData(res.data))
+      .catch((err) =>
+        setProjectData({
+          id: 0,
+          title: '백준 레벨1 문제 1 문제 풀이 합니다.',
+          isLock: false,
+          tagLanguage: 'javascript',
+        }),
+      );
+
     connectWebSocket();
 
     return () => {
@@ -65,7 +82,7 @@ const IDEPage = () => {
         console.log('Disconnected!');
       }
     };
-  }, [currentUserIndex]);
+  }, [users, currentUserIndex]);
 
   const handlePlaySuccess = (data) => {
     if (data.stdout) {
@@ -98,7 +115,9 @@ const IDEPage = () => {
     setIsRunning(false);
   };
 
-  const toggleChat = () => setIsChatVisible(!isChatVisible);
+  const toggleChat = () => {
+    setIsChatVisible(!isChatVisible);
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -106,9 +125,11 @@ const IDEPage = () => {
         <div className={styles.page}>
           <Toolbar
             state={state}
+            isChatVisible={isChatVisible}
             onChatToggle={toggleChat}
             onPlaySuccess={handlePlaySuccess}
             projectId="your-project-id"
+            projectData={projectData}
           />
           <div className={styles.main}>
             <Editor

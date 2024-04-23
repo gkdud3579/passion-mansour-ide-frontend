@@ -3,7 +3,17 @@ import { playFileContent, saveFileContent } from '../api';
 import styles from './Toolbar.module.css';
 import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/Icons';
 
-const Toolbar = ({ onPlaySuccess, state, onChatToggle, projectId, language, fileContent, file }) => {
+const Toolbar = ({
+  onPlaySuccess,
+  state,
+  isChatVisible,
+  onChatToggle,
+  projectId,
+  language,
+  fileContent,
+  file,
+  projectData,
+}) => {
   const { mutate: saveContent, isLoading: isSavingLoading } = useMutation(saveFileContent, {
     onSuccess: (data) => {
       console.log('Save successful:', data);
@@ -42,25 +52,32 @@ const Toolbar = ({ onPlaySuccess, state, onChatToggle, projectId, language, file
   return (
     <div className={styles.container}>
       <div className={styles.leftButtons}>
-        <button className={styles.exitButton}>
+        <button className={`${styles.icoBox} ${styles.btnNone}`}>
           <ExitIcon size={20} />
         </button>
-        <div className={styles.status}>
-          <span>공개</span>
-          <span>JavaScript</span>
-          <span>4/5</span>
+        <div className={styles.infoBox}>
+          <div className={styles.status}>
+            <span className={`${styles.tag} ${projectData.isLock ? 'private' : 'public'}`}>
+              {projectData.isLock ? '비공개' : '공개'}
+            </span>
+            <span className={`${styles.tag} ${projectData.tagLanguage}`}>{projectData.tagLanguage}</span>
+            <span style={{ display: 'none' }}>4/5</span>
+          </div>
+          <span className={styles.title}>{projectData.title}</span>
         </div>
-        <span className={styles.title}>백준 레벨 1 문제 1 문제 풀이합니다.</span>
       </div>
       <div className={styles.rightButtons}>
-        <button onClick={onChatToggle}>
+        <button
+          onClick={onChatToggle}
+          className={`${styles.icoBox} ${isChatVisible ? styles.btnActive : styles.btnNone}`}
+        >
           <CommentIcon size={20} />
         </button>
-        <button onClick={handleSave} disabled={isSavingLoading}>
-          <SaveIcon size={20} />
+        <button onClick={handleSave} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isSavingLoading}>
+          <SaveIcon size={18} />
         </button>
-        <button onClick={handlePlay} disabled={isPlayingLoading}>
-          <PlayIcon size={20} />
+        <button onClick={handlePlay} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isPlayingLoading}>
+          <PlayIcon size={15} />
         </button>
       </div>
     </div>

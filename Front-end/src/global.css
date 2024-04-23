@@ -23,6 +23,10 @@
   --pw-bg: #f9f9f9;
   --pw-text: #4c4c4c;
   --ide-ico: #444;
+  --ico-bg: #f0f0f0;
+  --ico-active-bg: #e8f1ff;
+  --ico-bg-hover: #d5d5d5;
+  --output-bg: #f1f1f1;
 }
 
 html.dark {
@@ -47,6 +51,10 @@ html.dark {
   --pw-bg: #343434;
   --pw-text: #ccc;
   --ide-ico: #d5d5d5;
+  --ico-bg: #444;
+  --ico-active-bg: #162d50;
+  --ico-bg-hover: #333;
+  --output-bg: #2f2f2f;
 }
 
 * {
