@@ -214,7 +214,7 @@ const SignupPage = () => {
         <Logo size={264} />
       </div>
 
-      <form onSubmit={onSubmit} className={styles.fromDiv}>
+      <form onSubmit={onSubmit} className={styles.formDiv}>
         <div className={styles.inputBox}>
           <input
             type="text"

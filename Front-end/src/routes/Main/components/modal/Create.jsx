@@ -9,9 +9,9 @@ const Create = ({ onClickCancel }) => {
   const [form, setForm] = useState({
     isLock: false,
     title: '',
-    password: '',
-    languageValue: '',
-    maxValue: '',
+    pw: '',
+    tagLanguage: '',
+    maxUser: '',
   });
 
   const titleRef = useRef();
@@ -21,12 +21,12 @@ const Create = ({ onClickCancel }) => {
 
   // 비공개 체크
   const onChangeCheck = useCallback(() => {
-    setForm({ ...form, isLock: !form.isLock, password: '' });
+    setForm({ ...form, isLock: !form.isLock, pw: '' });
   }, [form]);
 
   const onChangeTitle = useCallback(
     (e) => {
-      titleRef.current.style.borderColor = '#d5d5d5';
+      titleRef.current.style.borderColor = 'var(--border)';
       setForm({ ...form, title: e.target.value });
     },
     [form],
@@ -34,26 +34,26 @@ const Create = ({ onClickCancel }) => {
 
   const onChangeLanguage = useCallback(
     (e) => {
-      languageRef.current.style.borderColor = '#d5d5d5';
-      setForm({ ...form, languageValue: e.target.value });
+      languageRef.current.style.borderColor = 'var(--border)';
+      setForm({ ...form, tagLanguage: e.target.value });
     },
     [form],
   );
 
   const onChangeMax = useCallback(
     (e) => {
-      maxRef.current.style.borderColor = '#d5d5d5';
-      setForm({ ...form, maxValue: e.target.value });
+      maxRef.current.style.borderColor = 'var(--border)';
+      setForm({ ...form, maxUser: e.target.value });
     },
     [form],
   );
 
   const onChangePassword = useCallback(
     (e) => {
-      pwRef.current.style.borderColor = '#d5d5d5';
+      pwRef.current.style.borderColor = 'var(--border)';
       const value = Number(e.target.value);
       if (isNaN(value)) return;
-      setForm({ ...form, password: String(value) });
+      setForm({ ...form, pw: String(value) });
     },
     [form],
   );
@@ -68,23 +68,25 @@ const Create = ({ onClickCancel }) => {
         return false;
       }
 
-      if (form.languageValue === '') {
+      if (form.tagLanguage === '') {
         languageRef.current.style.borderColor = '#f00';
         return false;
       }
 
-      if (form.maxValue === '') {
+      if (form.maxUser === '') {
         maxRef.current.style.borderColor = '#f00';
         return false;
       }
 
-      if (form.isLock && form.password.length !== 4) {
+      if (form.isLock && form.pw.length !== 4) {
         pwRef.current.style.borderColor = '#f00';
         pwRef.current.focus();
         return false;
       }
 
+      const userId = localStorage.getItem('userId');
       const roomInfo = {
+        hostId: userId,
         ...form,
       };
 
@@ -114,12 +116,7 @@ const Create = ({ onClickCancel }) => {
             placeholder="제목"
           />
 
-          <select
-            className={styles.inputSelect}
-            ref={languageRef}
-            value={form.languageValue}
-            onChange={onChangeLanguage}
-          >
+          <select className={styles.inputSelect} ref={languageRef} value={form.tagLanguage} onChange={onChangeLanguage}>
             <option value="">언어 선택</option>
             {languages.map((language, idx) => (
               <option value={language[0]} key={idx}>
@@ -128,7 +125,7 @@ const Create = ({ onClickCancel }) => {
             ))}
           </select>
 
-          <select className={styles.inputSelect} ref={maxRef} value={form.maxValue} onChange={onChangeMax}>
+          <select className={styles.inputSelect} ref={maxRef} value={form.maxUser} onChange={onChangeMax}>
             <option value="">인원 선택</option>
             {maxUsers.map((count, idx) => (
               <option value={count} key={idx}>
@@ -142,7 +139,7 @@ const Create = ({ onClickCancel }) => {
               type="text"
               className={styles.inputBox}
               ref={pwRef}
-              value={form.password}
+              value={form.pw}
               onChange={onChangePassword}
               maxLength="4"
               placeholder="패스워드 입력 (4글자 숫자만 가능합니다)"

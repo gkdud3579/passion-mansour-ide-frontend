@@ -11,7 +11,7 @@ const Private = ({ privateRoom, onClickCancel }) => {
   const navigate = useNavigate();
 
   const onChangePrivatePassword = useCallback((e) => {
-    pwConfirmRef.current.style.borderColor = '#d5d5d5';
+    pwConfirmRef.current.style.borderColor = 'var(--border)';
     const value = Number(e.target.value);
     if (isNaN(value)) return;
     setPrivatePassword(String(e.target.value));
@@ -34,7 +34,8 @@ const Private = ({ privateRoom, onClickCancel }) => {
       }
 
       setIsPrivate(true);
-      navigate(`/ide?id=${privateRoom.id}&private=${privateRoom.pw}`);
+      localStorage.setItem('isChk', 'true');
+      navigate(`/ide/${privateRoom.id}`);
     },
     [privatePassword, privateRoom, navigate, setIsPrivate],
   );

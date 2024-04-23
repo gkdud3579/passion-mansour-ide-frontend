@@ -11,6 +11,7 @@ import PrivateContext from './contexts/privateContext';
 import { useEffect, useState } from 'react';
 import { ThemeContext } from '@emotion/react';
 import PwChange from './routes/PwChange/PwChange';
+import TestService from './routes/TestService/TestService';
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ function App() {
                 <Route path="/mypage" element={<MyPage />} />
                 <Route path="/pwChange" element={<PwChange />} />
                 <Route path="/ide/:id" element={<IDEPage />} />
+                <Route path="/test/:id" element={<TestService />} />
                 <Route path="/*" element={<NotFound />} />
               </Routes>
             </ThemeContext.Provider>

@@ -22,6 +22,7 @@
   --cancel-btn: #ccc;
   --pw-bg: #f9f9f9;
   --pw-text: #4c4c4c;
+  --ide-ico: #444;
 }
 
 html.dark {
@@ -45,10 +46,7 @@ html.dark {
   --cancel-btn: #343434;
   --pw-bg: #343434;
   --pw-text: #ccc;
-}
-
-html.dark svg {
-  fill: #fff;
+  --ide-ico: #d5d5d5;
 }
 
 * {

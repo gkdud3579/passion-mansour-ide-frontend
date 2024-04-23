@@ -6,7 +6,32 @@ import 'dayjs/locale/ko';
 dayjs.locale('ko');
 dayjs.extend(relativeTime);
 
-const Post = ({ data, onClickPriviateOpen }) => {
+const Post = ({ type, data, onClickPriviateOpen }) => {
+  // 종료된 게시글 보여주기
+  if (type === 1) {
+    return (
+      <div key={data.id} className={styles.itemBox} onClick={() => window.alert('준비중입니다')}>
+        <div className={styles.itemLeft}>
+          <div className={styles.itemUpperBox}>
+            <span className={`${styles.tag} ${data.lagnguage}`}>{data.lagnguage}</span>
+          </div>
+          <p className={styles.itemTitle}>{data.title}</p>
+          <div className={styles.itemBottomBox}>
+            <span>{data.user.name}</span>
+            <b className={styles.space}>·</b>
+            <span>{dayjs(data.createAt).fromNow(false)}</span>
+          </div>
+        </div>
+        <div className={styles.itemRight}>
+          <figure className={styles.profileFigure}>
+            <img src={data.user.profile} className={styles.profileImg} alt={data.user.name} />
+          </figure>
+        </div>
+      </div>
+    );
+  }
+
+  // 진행중인 게시글 보여주기
   return (
     <div
       key={data.id}
@@ -24,10 +49,13 @@ const Post = ({ data, onClickPriviateOpen }) => {
         <div className={styles.itemBottomBox}>
           <span>{data.user.name}</span>
           <b className={styles.space}>·</b>
-          <span>
+          <span style={{ display: 'none' }}>
             {data.users.length + 1}명 / {data.maxUser}명
           </span>
-          <b className={styles.space}> · </b>
+          <b className={styles.space} style={{ display: 'none' }}>
+            {' '}
+            ·{' '}
+          </b>
           <span>{dayjs(data.createAt).fromNow(false)}</span>
         </div>
       </div>
@@ -35,7 +63,7 @@ const Post = ({ data, onClickPriviateOpen }) => {
         <figure className={styles.profileFigure}>
           <img src={data.user.profile} className={styles.profileImg} alt={data.user.name} />
         </figure>
-        {data.users.length !== 0 && <span>+{data.users.length}</span>}
+        {data.users.length !== 0 && <span style={{ display: 'none' }}>+{data.users.length}</span>}
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import Create from './components/modal/Create';
 import TabMenu from './components/TabMenu';
 import axios from 'axios';
 import api from '../../api/api';
+import PrivateContext from '../../contexts/privateContext';
 
 /* 더미 데이터 */
 const posts = [
@@ -94,14 +95,12 @@ export default function MainPage() {
     } else {
       setItems(posts);
     }
-  }, [tabIndex]);
 
-  useEffect(() => {
     api
       .get('/posts')
       .then((res) => setItems(res.data))
       .catch((err) => console.log(err));
-  }, []);
+  }, [tabIndex]);
 
   const onFilter = useCallback(
     (e) => {
@@ -121,6 +120,16 @@ export default function MainPage() {
     },
     [items],
   );
+
+  const onClickTab = useCallback((type) => {
+    if (type === 0) {
+      setTabIndex(0);
+      // api
+    } else {
+      setTabIndex(1);
+      // api
+    }
+  }, []);
 
   const onClickMakeOpen = useCallback(() => {
     setIsModal({ ...isModal, isMake: !isModal.isMake });
@@ -164,11 +173,11 @@ export default function MainPage() {
             </button>
           </div>
 
-          <TabMenu tabIndex={tabIndex} setTabIndex={setTabIndex} />
+          <TabMenu tabIndex={tabIndex} onClickTab={onClickTab} />
 
           <div className={styles.infoBox}>
             <h4 className={styles.infoMsg}>
-              진행중인 IDE <span>{items.length}개</span>
+              {tabIndex === 0 ? '진행중인 IDE' : '종료된 IDE'} <span>{items.length}개</span>
             </h4>
 
             <select className={styles.selectBox} onChange={onFilter}>
@@ -192,7 +201,9 @@ export default function MainPage() {
                 <>
                   <div className={styles.itemWrapper}>
                     {items.map((data) => {
-                      return <Post data={data} key={data.id} onClickPriviateOpen={onClickPriviateOpen} />;
+                      return (
+                        <Post data={data} key={data.id} type={tabIndex} onClickPriviateOpen={onClickPriviateOpen} />
+                      );
                     })}
                   </div>
 
@@ -214,7 +225,7 @@ export default function MainPage() {
                 <>
                   <div className={styles.itemWrapper}>
                     {items.map((data) => {
-                      return <Post data={data} key={data.id} onClickPriviateOpen={onClickPriviateOpen} />;
+                      return <Post data={data} key={data.id} type={tabIndex} />;
                     })}
                   </div>
                 </>
