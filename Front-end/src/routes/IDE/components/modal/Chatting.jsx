@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import styles from './Chatting.module.css';
@@ -10,22 +10,30 @@ import { SearchIcon } from '../../../../components/Icons';
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
 
-let stompClient = null;
-
-const Chatting = () => {
+const Chatting = ({ projectId = 1, userId = 1 }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const stompClient = useRef(null);
 
   useEffect(() => {
-    const socket = new SockJS('http://localhost:7382/websocket'); // https 사용시 'wss://'로 시작해야 합니다.
-    stompClient = Stomp.over(socket);
+    const socket = new SockJS('http://localhost:7382/websocket');
+    stompClient.current = Stomp.over(socket);
 
-    stompClient.connect(
+    stompClient.current.connect(
       {},
       function (frame) {
-        stompClient.subscribe('/topic/messages', function (message) {
+        console.log('Connected: ' + frame);
+        stompClient.current.subscribe(`/topic/chat/${projectId}`, function (sdkEvent) {
           const msg = JSON.parse(sdkEvent.body);
-          setMessages((messages) => [...messages, msg]);
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              ...msg,
+              text: msg.message,
+              isOwn: msg.senderId === userId,
+              special: msg.type === 'JOIN' || msg.type === 'LEAVE',
+            },
+          ]);
         });
       },
       function (error) {
@@ -34,34 +42,41 @@ const Chatting = () => {
     );
 
     return () => {
-      if (stompClient && stompClient.connected) {
-        stompClient.disconnect(() => {
-          console.log('Disconnected!');
-        });
+      if (stompClient.current && stompClient.current.connected) {
+        stompClient.current.disconnect();
+        console.log('Disconnected!');
       }
     };
-  }, []);
+  }, [projectId, userId]);
 
-  const handleInputChange = (e) => {
-    setInput(e.target.value);
-  };
-
-  const handleSendClick = () => {
-    if (input.trim()) {
-      const newMessage = {
-        text: input,
-        user: { name: '나' },
+  const sendMessage = () => {
+    if (input.trim() && stompClient.current && stompClient.current.connected) {
+      const chatMessage = {
+        userId: userId,
+        message: input,
+        type: 'MESSAGE',
         timestamp: new Date().toISOString(),
-        isOwn: true,
       };
-      if (stompClient && stompClient.connected) {
-        stompClient.send('/app/chat.send', JSON.stringify(newMessage), {});
-        setInput('');
-      } else {
-        console.log('WebSocket is not connected.');
-      }
+
+      stompClient.current.send(`/app/chat/${projectId}`, JSON.stringify(chatMessage), {});
+      addMessageToUI(chatMessage, true);
+      setInput('');
     }
   };
+
+  const addMessageToUI = (message, isOwn) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        ...message,
+        text: message.message,
+        isOwn,
+        special: message.type === 'JOIN' || message.type === 'LEAVE',
+      },
+    ]);
+  };
+
+  const handleInputChange = (e) => setInput(e.target.value);
 
   return (
     <div className={styles.chatModal}>
@@ -76,17 +91,13 @@ const Chatting = () => {
       </header>
       <ul className={styles.messageList}>
         {messages.map((message, index) => (
-          <li key={index} className={message.isOwn ? styles.myMessage : styles.theirMessage}>
-            {!message.isOwn && (
-              <img
-                src={message.user.avatar || '/default_avatar.png'}
-                alt={message.user.name}
-                className={styles.profileImage}
-              />
-            )}
+          <li
+            key={index}
+            className={message.isOwn ? styles.myMessage : message.special ? styles.specialMessage : styles.theirMessage}
+          >
             <div className={styles.messageBubble}>
               <div className={styles.messageInfo}>
-                <span className={styles.userName}>{!message.isOwn ? message.user.name : '나'}</span>
+                {message.special ? null : <span className={styles.userName}>{message.sender}</span>}
                 <span className={styles.messageTimestamp}>{dayjs(message.timestamp).fromNow()}</span>
               </div>
               <p className={styles.messageText}>{message.text}</p>
@@ -100,13 +111,14 @@ const Chatting = () => {
           className={styles.messageInput}
           value={input}
           onChange={handleInputChange}
-          placeholder="코멘트를 입력해주세요"
+          placeholder="Type your message..."
         />
-        <button onClick={handleSendClick} className={styles.sendButton}>
+        <button onClick={sendMessage} className={styles.sendButton}>
           Send
         </button>
       </div>
     </div>
   );
 };
+
 export default Chatting;

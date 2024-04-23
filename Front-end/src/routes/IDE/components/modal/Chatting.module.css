@@ -104,3 +104,8 @@
   cursor: pointer;
 }
 
+.specialMessage {
+  background-color: #f0f0f0; /* Light grey background */
+  text-align: center; /* Center text */
+  color: #666; /* Dark grey text */
+}
