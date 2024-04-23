@@ -1,12 +1,23 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import styles from './Editor.module.css';
 import LanguageSelector from './LanguageSelector';
 import { Box } from '@chakra-ui/react';
 import { CODE_SNIPPETS } from '../../Constants';
+import { ThemeContext } from '@emotion/react';
 
 const Editor = ({ state, setState, isMaster, stompClient }) => {
+  const { isDark } = useContext(ThemeContext);
+  const [isTheme, setIsTheme] = useState('light');
   const [language, setLanguage] = useState('javascript');
+
+  useEffect(() => {
+    if (isDark) {
+      setIsTheme('vs-dark');
+    } else {
+      setIsTheme('light');
+    }
+  }, [isDark]);
 
   const onSelect = (lang) => {
     setLanguage(lang);
@@ -49,7 +60,7 @@ const Editor = ({ state, setState, isMaster, stompClient }) => {
       <LanguageSelector language={language} onSelect={onSelect} />
       <MonacoEditor
         height="100%"
-        theme="vs-light"
+        theme={isTheme}
         language={state.language}
         value={state.fileContent}
         defaultValue={CODE_SNIPPETS[language]}

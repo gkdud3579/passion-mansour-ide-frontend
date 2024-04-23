@@ -1,12 +1,13 @@
 import { Box, Button, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import { LANGUAGE_VERSIONS } from '../../Constants';
+import styles from './Editor.module.css';
 
 const languages = Object.entries(LANGUAGE_VERSIONS);
 const ACTIVE_COLOR = 'blue.400';
 
 const LanguageSelector = ({ language, onSelect }) => {
   return (
-    <Box ml={2} mt={2} mb={2}>
+    <Box className={styles.selectBox}>
       <Menu isLazy>
         <MenuButton py={0} fontSize="sm" as={Button}>
           {language}

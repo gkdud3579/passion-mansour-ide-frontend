@@ -1,24 +1,26 @@
 .container {
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  background: #fafafa;
-  border-left: 1px solid #ccc;
+  padding: 24px 20px;
+  background: var(--html-bg);
+  border-left: 1px solid var(--border);
   flex: 1;
 }
 
 .title {
-  font-weight: bold;
-  margin-bottom: 20px;
-  margin-left: 8px;
+  color: var(--color);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 24px;
 }
 
 .resultContainer {
   flex: 1;
-  padding: 10px 20px;
-  background: #f1f1f1;
+  padding: 14px 20px;
+  background: var(--output-bg);
   overflow: auto;
   width: 100%;
+  color: var(--color);
 }
 
 .result {

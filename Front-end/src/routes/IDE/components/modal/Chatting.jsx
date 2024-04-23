@@ -83,10 +83,10 @@ const Chatting = ({ projectId = 1, userId = 1 }) => {
       <header className={styles.chatHeader}>
         <span>Live Chat</span>
         <div className={styles.chatFunction}>
-          <button>
+          <button style={{ display: 'none' }}>
             <SearchIcon size={20} />
           </button>
-          <div>{messages.length}</div>
+          <div style={{ display: 'none' }}>{messages.length}</div>
         </div>
       </header>
       <ul className={styles.messageList}>
