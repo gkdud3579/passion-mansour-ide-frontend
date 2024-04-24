@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import styles from './PwChange.module.css';
 import { useNavigate } from 'react-router';
 import { Helmet } from 'react-helmet';
-import axios from 'axios';
+import api from '../../api/api';
 import ServiceLayout from '../../layouts/ServiceLayout';
 
 const PwChange = () => {
@@ -78,24 +78,20 @@ const PwChange = () => {
       } else if (!isState.isPasswordConfirm) {
         window.alert('두 비밀번호가 일치하지 않습니다');
       } else {
-        window.alert('성공');
         try {
           const userInfo = {
-            password: form.password,
+            oldPassword: form.currentPassword,
+            newPassword: form.password,
           };
 
-          const res = await axios.post('http://localhost:4000/user', userInfo, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+          const res = await api.post(`/members/change-password`, userInfo);
 
-          console.log('mypage - res.data', res.data);
-          console.log('mypage - userInfo', userInfo);
-          console.log('수정 완료');
-
-          navigate('/main');
+          if (res.status === 200) {
+            window.alert('비밀번호가 변경되었습니다.');
+            navigate('/main');
+          }
         } catch (err) {
+          window.alert('현재 비밀번호가 맞지 않습니다.');
           console.log(err);
         }
       }

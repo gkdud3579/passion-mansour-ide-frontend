@@ -302,14 +302,14 @@
 }
 
 .notPostTitle {
-  color: #000;
+  color: var(--color);
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 18px;
 }
 
 .notPostMsg {
-  color: #444;
+  color: var(--item-sub-color);
   font-size: 16px;
   font-weight: 300;
   text-align: center;

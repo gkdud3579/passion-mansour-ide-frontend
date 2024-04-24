@@ -1,11 +1,13 @@
 import { useCallback, useRef, useState } from 'react';
 import { LANGUAGE_VERSIONS } from '../../../IDE/Constants';
 import styles from '../../MainPage.module.css';
+import api from '../../../../api/api';
+import { useNavigate } from 'react-router';
 
 const languages = Object.entries(LANGUAGE_VERSIONS);
 const maxUsers = Array.from({ length: 5 }, (_, i) => i + 1);
 
-const Create = ({ onClickCancel }) => {
+const Create = ({ userId, onClickCancel }) => {
   const [form, setForm] = useState({
     isLock: false,
     title: '',
@@ -13,6 +15,8 @@ const Create = ({ onClickCancel }) => {
     tagLanguage: '',
     maxUser: '',
   });
+
+  const navigate = useNavigate();
 
   const titleRef = useRef();
   const languageRef = useRef();
@@ -59,7 +63,7 @@ const Create = ({ onClickCancel }) => {
   );
 
   const onSubmitMake = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault();
 
       if (form.title === '') {
@@ -84,16 +88,28 @@ const Create = ({ onClickCancel }) => {
         return false;
       }
 
-      const userId = localStorage.getItem('userId');
-      const roomInfo = {
-        hostId: userId,
-        ...form,
-      };
+      // const userId = localStorage.getItem('ud');
 
-      console.log(roomInfo);
-      console.log('make success!!');
+      console.log('cr : ', userId);
+
+      try {
+        const roomInfo = {
+          hostId: userId,
+          ...form,
+        };
+
+        console.log('roomInfo : ', roomInfo);
+
+        const res = await api.post('/projects', roomInfo);
+        console.log('roomRes : ', res);
+        console.log('make success!!');
+
+        navigate(`/ide/${res.data.projectId}`);
+      } catch (err) {
+        console.log(err);
+      }
     },
-    [form],
+    [form, userId, navigate],
   );
 
   return (

@@ -6,7 +6,7 @@ const api = axios.create({
     'content-type': 'application/json;charset=UTF-8',
     accept: 'application/json,',
   },
-  withCredentials: true,
+  withCredentials: true, // cors err 피하기
 });
 
 // access token 재발급
@@ -62,7 +62,7 @@ api.interceptors.response.use(
     config.sent = true; // 무한 재요청 방지
     const accessToken = await getRefreshToken();
     if (accessToken) {
-      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('access-token', accessToken);
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return axios(config); // 재요청

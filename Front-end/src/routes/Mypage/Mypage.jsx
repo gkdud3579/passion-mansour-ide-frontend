@@ -1,17 +1,20 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import ServiceLayout, { userInfo } from '../../layouts/ServiceLayout';
+import ServiceLayout from '../../layouts/ServiceLayout';
 import styles from './Mypage.module.css';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { ThemeContext } from '@emotion/react';
+import api from '../../api/api';
+import { getMyUser } from '../../api/serviceApi';
 
 export default function Mypage() {
   const { isDark, setIsDark } = useContext(ThemeContext);
+  const [userData, setUserData] = useState({});
   const [isTheme, setIsTheme] = useState('light');
   const [form, setForm] = useState({
-    name: userInfo.name,
-    nickname: userInfo.nickname,
+    name: '',
+    nickname: '',
   });
   const [isState, setIsState] = useState({
     isName: true,
@@ -31,6 +34,16 @@ export default function Mypage() {
     } else {
       setIsTheme('light');
     }
+
+    getMyUser()
+      .then((res) => {
+        console.log('userData : ', res);
+        if (res.status === 200) {
+          setUserData(res.data);
+          setForm({ name: res.data.name, nickname: res.data.nickName });
+        }
+      })
+      .catch((err) => console.log('err : ', err));
   }, [isDark]);
 
   const onChangeName = useCallback(
@@ -65,24 +78,29 @@ export default function Mypage() {
 
   const onIsNickname = useCallback(() => {
     const value = nickRef.current.value;
+    const baseURL = import.meta.env.VITE_API_BASE_URL;
 
     if (value.length < 2 || value.length > 12) {
       setIsState({ ...isState, isNickname: false });
       setMsg({ ...msg, nickname: '최소 2자에서 최대 12자 입니다' });
     } else {
-      // 나중에 post로 변환
       axios
-        .get('http://localhost:4000/user')
+        .get(`${baseURL}/members/check-nickname?nickName=${form.nickname}`, {
+          withCredentials: true,
+        })
         .then((res) => {
-          setIsState({ ...isState, isNickname: true });
-          setMsg({ ...msg, nickname: '사용가능한 닉네임입니다' });
+          if (res.status === 200) {
+            setIsState({ ...isState, isNickname: true });
+            setMsg({ ...msg, nickname: '사용가능한 닉네임입니다' });
+          }
         })
         .catch((err) => {
           setIsState({ ...isState, isNickname: false });
           setMsg({ ...msg, nickname: '사용중인 닉네임입니다' });
+          console.log(err);
         });
     }
-  }, [isState, msg]);
+  }, [form, isState, msg]);
 
   const onChangeTheme = useCallback(
     (e) => {
@@ -106,31 +124,37 @@ export default function Mypage() {
       } else if (!isState.isNickname) {
         window.alert('닉네임이 올바른 형식이 아니거나 중복확인 해주세요');
       } else {
-        window.alert('성공');
+        const userInfo = {
+          id: userData.id,
+          name: form.name,
+          nickName: form.nickname,
+        };
+
+        console.log('aaaaaaaaa');
+        console.log('userInfo : ', userInfo);
+
         try {
-          const userInfo = {
-            pofile: 'img/defalut_profile.png',
-            name: form.name,
-            nickname: form.nickname,
-          };
+          const res = await api.patch(`/members/update-profile`, userInfo);
 
-          const res = await axios.post('http://localhost:4000/user', userInfo, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+          if (res.status === 200) {
+            console.log('mypage - res.data', res.data);
+            console.log('mypage - userInfo', userInfo);
+            console.log('수정 완료');
 
-          console.log('mypage - res.data', res.data);
-          console.log('mypage - userInfo', userInfo);
-          console.log('수정 완료');
+            window.alert('성공');
 
-          navigate('/main');
+            navigate('/main');
+          }
         } catch (err) {
-          console.log(err);
+          if (err.status === 400) {
+            window.alert('정보 수정에 실패했습니다');
+          }
         }
+
+        console.log('bbbbbbbbb');
       }
     },
-    [form, isState, navigate],
+    [userData, form, isState, navigate],
   );
 
   return (
@@ -142,9 +166,9 @@ export default function Mypage() {
       <div className={styles.container}>
         <form onSubmit={onSubmit} className={styles.formDiv}>
           <div className={styles.profileContainer}>
-            <img src={userInfo.profile} alt="profile" className={styles.profileImage} />
+            <img src={!userData.profile && 'img/default_profile.png'} alt="profile" className={styles.profileImage} />
             <div className={styles.profileDetails}>
-              <p className={styles.nameColor}>홍길동</p>
+              <p className={styles.nameColor}>{userData.name}</p>
               <button style={{ display: 'none' }}>프로필 변경</button>
             </div>
           </div>

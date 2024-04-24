@@ -31,20 +31,33 @@ export const executeCode = async (language, sourceCode) => {
 // };
 
 export const saveFileContent = async ({ projectId, language, fileContent = '' }) => {
+<<<<<<< HEAD
   // 요청 본문에는 projectId, language, fileContent 포함
   const response = await BackendAPI.patch(`/projects/${projectId}/save`, {
     language,
     fileContent
   });
   
+=======
+  // URL에서 쿼리 파라미터로 language와 fileContent를 전달합니다.
+  const url = `/projects/${projectId}/save?language=${encodeURIComponent(language)}&fileContent=${encodeURIComponent(
+    fileContent,
+  )}`;
+
+  // 요청 본문에는 projectId만 포함시킵니다.
+  const response = await BackendAPI.patch(url, {
+    projectId,
+  });
+
+>>>>>>> c7f0997b86b23e7798fcbf7debd19fe402e18445
   return response.data;
 };
 
 export const playFileContent = async ({ projectId, language, file = '' }) => {
-    const response = await BackendAPI.post(`/projects/{projectId}/run`, {
-      projectId,
-      language,
-      file
-    });
-    return response.data;
-  };
+  const response = await BackendAPI.post(`/projects/{projectId}/run`, {
+    projectId,
+    language,
+    file,
+  });
+  return response.data;
+};
