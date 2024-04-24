@@ -8,7 +8,7 @@ const PistonAPI = axios.create({
 
 // 새 백엔드 서버용 인스턴스
 const BackendAPI = axios.create({
-  baseURL: 'https://your-new-backend-url.com/api',
+  baseURL: 'http://ec2-54-180-141-29.ap-northeast-2.compute.amazonaws.com/api',
 });
 
 export const executeCode = async (language, sourceCode) => {

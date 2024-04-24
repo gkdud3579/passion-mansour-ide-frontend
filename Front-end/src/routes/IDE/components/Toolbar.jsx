@@ -9,6 +9,7 @@ const Toolbar = ({
   onChatToggle,
   projectData,
 }) => {
+
   const { mutate: saveContent, isLoading: isSavingLoading } = useMutation(saveFileContent, {
     onSuccess: (data) => {
       console.log('Save successful:', data);
@@ -32,6 +33,8 @@ const Toolbar = ({
       alert('Error playing file: ' + error.message);
     },
   });
+
+  if (!projectData) return null;
 
   const handleSave = async () => {
     try {
