@@ -11,6 +11,7 @@ import TabMenu from './components/TabMenu';
 import axios from 'axios';
 import api from '../../api/api';
 import PrivateContext from '../../contexts/privateContext';
+import { getMyUser, postProjects } from '../../api/serviceApi';
 
 /* 더미 데이터 */
 const posts = [
@@ -81,25 +82,48 @@ const endPosts = [
   },
 ];
 
+// /ide/2
+
 export default function MainPage() {
   const [items, setItems] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
+  const [userId, setUserId] = useState(0);
   const [isModal, setIsModal] = useState({ isMake: false, isLock: false });
   const [privateRoom, setPrivateRoom] = useState({ id: 0, title: '', pw: '' });
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    const getData = {
+      isEnd: tabIndex === 0 ? false : true,
+    };
+
     if (tabIndex === 1) {
-      setItems(endPosts);
+      api
+        .post('/board', getData)
+        .then((res) => {
+          console.log(res);
+          // setItems(res.data);
+        })
+        .catch((err) => console.log(err));
     } else {
-      setItems(posts);
+      api
+        .post('/board', getData)
+        .then((res) => {
+          console.log(res);
+          // setItems(res.data);
+        })
+        .catch((err) => console.log(err));
     }
 
-    api
-      .get('/posts')
-      .then((res) => setItems(res.data))
-      .catch((err) => console.log(err));
+    getMyUser()
+      .then((res) => {
+        console.log('userData : ', res);
+        if (res.status === 200) {
+          setUserId(res.data.id);
+        }
+      })
+      .catch((err) => console.log('err : ', err));
   }, [tabIndex]);
 
   const onFilter = useCallback(
@@ -220,7 +244,14 @@ export default function MainPage() {
           {tabIndex === 1 && (
             <>
               {items.length === 0 ? (
-                <></>
+                <div className={styles.notPostBox}>
+                  <p className={styles.notPostTitle}>종료된 IDE가 없습니다.</p>
+                  <span className={styles.notPostMsg}>
+                    우측 상단에 ‘VIBE IDE 생성' 버튼을 클릭하여
+                    <br />
+                    VIBE IDE를 실행해보세요
+                  </span>
+                </div>
               ) : (
                 <>
                   <div className={styles.itemWrapper}>
@@ -235,7 +266,7 @@ export default function MainPage() {
         </div>
       </div>
 
-      {isModal.isMake && <Create onClickCancel={onClickCancel} />}
+      {isModal.isMake && <Create userId={userId} onClickCancel={onClickCancel} />}
       {isModal.isLock && <Private privateRoom={privateRoom} onClickCancel={onClickCancel} />}
     </ServiceLayout>
   );

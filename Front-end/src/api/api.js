@@ -1,21 +1,19 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // api 연동 필요 임시 주소 사용
-  baseURL: 'http://localhost:4000',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     'content-type': 'application/json;charset=UTF-8',
     accept: 'application/json,',
   },
-  withCredentials: true,
+  withCredentials: true, // cors err 피하기
 });
 
 // access token 재발급
 const getRefreshToken = async () => {
   try {
-    // 재발급 요청해야 하는 API 주소 필요
-    const res = await api.post();
-    const accessToken = res.data.data?.accessToken;
+    const res = await api.post('/members/refresh-token');
+    const accessToken = res.data.accessToken;
     return accessToken;
   } catch (err) {
     // 로그아웃 처리
@@ -28,14 +26,12 @@ api.interceptors.request.use(
   (config) => {
     // 헤더에 엑세스 토큰 담기
     const accessToken = localStorage.getItem('access-token');
-    const refreshToekn = localStorage.getItem('refresh-token');
 
     console.log('api 01 : ', config);
     console.log('api 02 : ', accessToken);
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
-      config.headers.common['Refresh-Token'] = refreshToekn;
     }
     return config;
   },
@@ -56,6 +52,7 @@ api.interceptors.response.use(
 
     console.log('api 05 : ', config);
     console.log('api 06 : ', response);
+    console.log('api 07 : ', error);
 
     //  401에러가 아니면 그냥 에러 발생
     if (response.status !== 401) {
@@ -65,7 +62,7 @@ api.interceptors.response.use(
     config.sent = true; // 무한 재요청 방지
     const accessToken = await getRefreshToken();
     if (accessToken) {
-      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('access-token', accessToken);
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return axios(config); // 재요청

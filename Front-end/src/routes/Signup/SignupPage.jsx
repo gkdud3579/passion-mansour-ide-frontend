@@ -126,27 +126,33 @@ const SignupPage = () => {
 
   const onIsNickname = useCallback(() => {
     const value = nickRef.current.value;
+    const baseURL = import.meta.env.VITE_API_BASE_URL;
 
     if (value.length < 2 || value.length > 12) {
       setIsState({ ...isState, isNickname: false });
       setMsg({ ...msg, nickname: '최소 2자에서 최대 12자 입니다' });
     } else {
-      // 나중에 post로 변환
       axios
-        .get('http://localhost:4000/login')
+        .get(`${baseURL}/members/check-nickname?nickName=${form.nickname}`, {
+          withCredentials: true,
+        })
         .then((res) => {
-          setIsState({ ...isState, isNickname: true });
-          setMsg({ ...msg, nickname: '사용가능한 닉네임입니다' });
+          if (res.status === 200) {
+            setIsState({ ...isState, isNickname: true });
+            setMsg({ ...msg, nickname: '사용가능한 닉네임입니다' });
+          }
         })
         .catch((err) => {
           setIsState({ ...isState, isNickname: false });
           setMsg({ ...msg, nickname: '사용중인 닉네임입니다' });
+          console.log(err);
         });
     }
-  }, [isState, msg]);
+  }, [form, isState, msg]);
 
   const onIsId = useCallback(() => {
     const value = idRef.current.value;
+    const baseURL = import.meta.env.VITE_API_BASE_URL;
     const isNumber = /[0-9]/g;
     const isEnglish = /[a-z]/gi;
 
@@ -157,47 +163,54 @@ const SignupPage = () => {
       setIsState({ ...isState, isId: false });
       setMsg({ ...msg, id: '영문+숫자 조합으로 입력해주세요' });
     } else {
-      // 나중에 post로 변환
       axios
-        .get('http://localhost:4000/login')
+        .get(`${baseURL}/members/check-loginId?loginId=${form.id}`, {
+          withCredentials: true,
+        })
         .then((res) => {
-          setIsState({ ...isState, isId: true });
-          setMsg({ ...msg, id: '사용가능한 아이디입니다.' });
+          if (res.status === 200) {
+            setIsState({ ...isState, isId: true });
+            setMsg({ ...msg, id: '사용가능한 아이디입니다.' });
+          }
         })
         .catch((err) => {
           setIsState({ ...isState, isId: false });
           setMsg({ ...msg, id: '사용중인 아이디입니다' });
+          console.log(err);
         });
     }
-  }, [isState, msg]);
+  }, [form, isState, msg]);
 
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
 
+      const baseURL = import.meta.env.VITE_API_BASE_URL;
+
       try {
         const userInfo = {
-          id: form.id,
+          loginId: form.id,
           password: form.password,
           name: form.name,
-          nickname: form.nickname,
-          profile: 'img/default_profile.png',
+          nickName: form.nickname,
         };
 
-        const res = await axios.post('http://localhost:4000/login', userInfo, {
+        const res = await axios.post(`${baseURL}/members/register`, userInfo, {
           headers: {
             'Content-Type': 'application/json',
           },
+          withCredentials: true,
         });
 
         // 토큰 저장
-        localStorage.setItem('access-token', 'test');
+        localStorage.setItem('access-token', res.data.accessToken);
+        localStorage.setItem('ud', res.data.member);
 
-        console.log(res.data);
-        console.log('회원가입 완료');
+        window.alert('회원가입이 완료되었습니다.');
 
         navigate('/main');
       } catch (err) {
+        window.alert('회원가입에 실패했습니다. 관리자나 운영자에게 문의주세요.');
         console.log(err);
       }
     },
