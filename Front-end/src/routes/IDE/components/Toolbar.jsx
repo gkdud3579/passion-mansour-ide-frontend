@@ -1,23 +1,14 @@
 import { useMutation } from 'react-query';
-import { playFileContent, saveFileContent } from '../api';
+import { saveFileContent, playFileContent } from '../api';
 import styles from './Toolbar.module.css';
 import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/Icons';
 
-<<<<<<< HEAD
-const Toolbar = ({ state, onChatToggle, projectId, language, fileContent, file }) => {
-=======
 const Toolbar = ({
-  onPlaySuccess,
   state,
   isChatVisible,
   onChatToggle,
-  projectId,
-  language,
-  fileContent,
-  file,
   projectData,
 }) => {
->>>>>>> 1fff7c3c72ae0bafcc70f751fa9a30c8843e76c7
   const { mutate: saveContent, isLoading: isSavingLoading } = useMutation(saveFileContent, {
     onSuccess: (data) => {
       console.log('Save successful:', data);
@@ -32,7 +23,8 @@ const Toolbar = ({
   const { mutate: playContent, isLoading: isPlayingLoading } = useMutation(playFileContent, {
     onSuccess: (data) => {
       console.log('Play successful:', data);
-      onPlaySuccess(data);
+      // Assume onPlaySuccess function is defined elsewhere or pass it as a prop
+      // onPlaySuccess(data);
       alert('Play successful!');
     },
     onError: (error) => {
@@ -40,47 +32,31 @@ const Toolbar = ({
       alert('Error playing file: ' + error.message);
     },
   });
-<<<<<<< HEAD
-
-  const handleSave = () => {
-    // const fileContent = editorRef.current.getValue();
-    // console.log('Sending data to server:', { projectId, language, fileContent });
-    console.log(state);
-    saveContent({ projectId, language, fileContent });
-  };
-
-  const handlePlay = () => {
-    console.log(state);
-    playContent({ projectId, language, file });
-=======
-  
 
   const handleSave = async () => {
     try {
-      const savedData = await saveFileContent({
-        projectId: projectData.id, // 현재 프로젝트의 ID
+      await saveContent({
+        projectId: projectData.id,
         language: state.language,
         fileContent: state.fileContent,
       });
-      console.log('File saved successfully:', savedData);
-      alert('File saved successfully!');
     } catch (error) {
       console.error('Error saving file:', error);
       alert('Error saving file: ' + error.message);
     }
   };
-  
 
   const handlePlay = async () => {
-    setIsRunning(true);
     try {
-      const result = await executeCode(state.language, state.fileContent);
-      setOutput(result.output);
+      await playContent({
+        projectId: projectData.id,
+        language: state.language,
+        fileContent: state.fileContent, // Assuming fileContent is correct
+      });
     } catch (error) {
-      console.error('Error executing code: ', error);
+      console.error('Error playing file:', error);
+      alert('Error playing file: ' + error.message);
     }
-    setIsRunning(false);
->>>>>>> 1fff7c3c72ae0bafcc70f751fa9a30c8843e76c7
   };
 
   return (
@@ -95,31 +71,24 @@ const Toolbar = ({
               {projectData.isLock ? '비공개' : '공개'}
             </span>
             <span className={`${styles.tag} ${projectData.tagLanguage}`}>{projectData.tagLanguage}</span>
-            <span style={{ display: 'none' }}>4/5</span>
           </div>
           <span className={styles.title}>{projectData.title}</span>
         </div>
       </div>
       <div className={styles.rightButtons}>
-        <button
-          onClick={onChatToggle}
-          className={`${styles.icoBox} ${isChatVisible ? styles.btnActive : styles.btnNone}`}
-        >
+        <button onClick={onChatToggle}
+          className={`${styles.icoBox} ${isChatVisible ? styles.btnActive : styles.btnNone}`}>
           <CommentIcon size={20} />
         </button>
-<<<<<<< HEAD
-        <button onClick={handleSave} disabled={isSavingLoading}>
-          <SaveIcon size={20} />
-        </button>
-        <button onClick={handlePlay} disabled={isPlayingLoading}>
-          <PlayIcon size={20} />
-=======
-        <button onClick={handleSave} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isSavingLoading}>
+        <button onClick={handleSave}
+          className={`${styles.icoBox} ${styles.btnNone}`}
+          disabled={isSavingLoading}>
           <SaveIcon size={18} />
         </button>
-        <button onClick={handlePlay} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isPlayingLoading}>
+        <button onClick={handlePlay}
+          className={`${styles.icoBox} ${styles.btnNone}`}
+          disabled={isPlayingLoading}>
           <PlayIcon size={15} />
->>>>>>> 1fff7c3c72ae0bafcc70f751fa9a30c8843e76c7
         </button>
       </div>
     </div>
