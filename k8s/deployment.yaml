@@ -19,10 +19,10 @@ spec:
             - name: VITE_API_BASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: api-secret
+                  name: my-secret
                   key: VITE_API_BASE_URL
             - name: VITE_WEBSOCKET_URL
               valueFrom:
                 secretKeyRef:
-                  name: websocket-secret
+                  name: my-secret
                   key: VITE_WEBSOCKET_URL
