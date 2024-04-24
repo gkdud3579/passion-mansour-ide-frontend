@@ -24,6 +24,7 @@ const IDEPage = () => {
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const stompClient = useRef(null);
   const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
+  console.log('2024-04-25 03:42');
   console.log(projectData);
 
   // project 정보
@@ -33,6 +34,8 @@ const IDEPage = () => {
   // };
 
   useEffect(() => {
+    console.log('2024-04-25 03:42');
+
     const connectWebSocket = () => {
       const socket = new SockJS(websocketUrl);
       stompClient.current = Stomp.over(socket);
