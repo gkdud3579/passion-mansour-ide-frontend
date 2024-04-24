@@ -13,5 +13,5 @@ spec:
     spec:
       containers:
         - name: passion-mansour-ide-frontend
-          image: krmp-d2hub-idock.9rum.cc/dev-test/repo_c29f411a4deb
+          image: krmp-d2hub-idock.9rum.cc/dev-test/repo_6c710cd20ff4
           imagePullPolicy: Always

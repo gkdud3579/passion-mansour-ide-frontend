@@ -86,7 +86,10 @@ export default function Mypage() {
     } else {
       axios
         .get(`${baseURL}/members/check-nickname?nickName=${form.nickname}`, {
-          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: false,
         })
         .then((res) => {
           if (res.status === 200) {
@@ -146,9 +149,7 @@ export default function Mypage() {
             navigate('/main');
           }
         } catch (err) {
-          if (err.status === 400) {
-            window.alert('정보 수정에 실패했습니다');
-          }
+          window.alert('정보 수정에 실패했습니다');
         }
 
         console.log('bbbbbbbbb');
