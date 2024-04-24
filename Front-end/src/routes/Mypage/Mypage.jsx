@@ -146,9 +146,7 @@ export default function Mypage() {
             navigate('/main');
           }
         } catch (err) {
-          if (err.status === 400) {
-            window.alert('정보 수정에 실패했습니다');
-          }
+          window.alert('정보 수정에 실패했습니다');
         }
 
         console.log('bbbbbbbbb');

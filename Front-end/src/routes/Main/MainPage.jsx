@@ -13,77 +13,6 @@ import api from '../../api/api';
 import PrivateContext from '../../contexts/privateContext';
 import { getMyUser, postProjects } from '../../api/serviceApi';
 
-/* 더미 데이터 */
-const posts = [
-  {
-    id: 0,
-    title: '백준 레벨1 문제 1 문제 풀이 합니다.',
-    createAt: new Date('2024-03-01'),
-    private: false, // true : 비공개, false : 공개
-    privatePassword: '',
-    lagnguage: 'javascript',
-    maxUser: 5,
-    user: {
-      id: new Date(),
-      name: '홍길동',
-      nickname: '제임슨',
-      profile: 'img/default_profile.png',
-      createAt: '2024-04-12 10:34:23',
-      theme: 'light',
-      permission: true,
-    },
-    users: [
-      { id: 1, name: '톰', permission: false },
-      { id: 2, name: '코딩캣', permission: false },
-    ],
-  },
-  {
-    id: 1,
-    title: '열정 만수르 프로젝트 코드리뷰 pw:0411',
-    createAt: new Date('2024-04-01'),
-    private: true,
-    privatePassword: '0411',
-    lagnguage: 'java',
-    maxUser: 4,
-    user: {
-      id: new Date(),
-      name: '홍길동',
-      nickname: '코딩맨',
-      profile: 'img/default_profile.png',
-      createAt: '2024-04-13 10:34:23',
-      theme: 'dark',
-    },
-    users: [],
-  },
-];
-
-const endPosts = [
-  {
-    id: 0,
-    title: '열정 만수르 프로젝트 코드리뷰 0411',
-    createAt: new Date(),
-    private: false, // true : 비공개, false : 공개
-    privatePassword: '',
-    lagnguage: 'javascript',
-    maxUser: 5,
-    user: {
-      id: new Date(),
-      name: '홍길동',
-      nickname: '톰',
-      profile: 'img/default_profile.png',
-      createAt: '2024-04-12 10:34:23',
-      theme: 'light',
-      permission: true,
-    },
-    users: [
-      { id: 1, name: '톰', permission: false },
-      { id: 2, name: '코딩캣', permission: false },
-    ],
-  },
-];
-
-// /ide/2
-
 export default function MainPage() {
   const [items, setItems] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
@@ -111,7 +40,7 @@ export default function MainPage() {
         .post('/board', getData)
         .then((res) => {
           console.log(res);
-          // setItems(res.data);
+          setItems(res.data);
         })
         .catch((err) => console.log(err));
     }

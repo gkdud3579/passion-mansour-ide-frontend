@@ -33,6 +33,8 @@ const SignupPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('2024-04-24 11시 배포 완료');
+
     if (localStorage.getItem('access-token')) {
       navigate('/main');
     }
@@ -132,10 +134,14 @@ const SignupPage = () => {
       setIsState({ ...isState, isNickname: false });
       setMsg({ ...msg, nickname: '최소 2자에서 최대 12자 입니다' });
     } else {
+      //.get(`${baseURL}/members/check-nickname?nickName=${form.nickname}`, {
       axios
-        .get(`${baseURL}/members/check-nickname?nickName=${form.nickname}`, {
-          withCredentials: true,
-        })
+        .get(
+          `http://ec2-54-180-141-29.ap-northeast-2.compute.amazonaws.com/api/members/check-nickname?nickName=${form.nickname}`,
+          {
+            withCredentials: true,
+          },
+        )
         .then((res) => {
           if (res.status === 200) {
             setIsState({ ...isState, isNickname: true });
@@ -163,10 +169,14 @@ const SignupPage = () => {
       setIsState({ ...isState, isId: false });
       setMsg({ ...msg, id: '영문+숫자 조합으로 입력해주세요' });
     } else {
+      // .get(`${baseURL}/members/check-loginId?loginId=${form.id}`, {
       axios
-        .get(`${baseURL}/members/check-loginId?loginId=${form.id}`, {
-          withCredentials: true,
-        })
+        .get(
+          `http://ec2-54-180-141-29.ap-northeast-2.compute.amazonaws.com/api/members/check-loginId?loginId=${form.id}`,
+          {
+            withCredentials: true,
+          },
+        )
         .then((res) => {
           if (res.status === 200) {
             setIsState({ ...isState, isId: true });
@@ -195,12 +205,17 @@ const SignupPage = () => {
           nickName: form.nickname,
         };
 
-        const res = await axios.post(`${baseURL}/members/register`, userInfo, {
-          headers: {
-            'Content-Type': 'application/json',
+        // axios.post(`${baseURL}/members/register`, userInfo, {});
+        const res = await axios.post(
+          `http://ec2-54-180-141-29.ap-northeast-2.compute.amazonaws.com/api/members/register`,
+          userInfo,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
           },
-          withCredentials: true,
-        });
+        );
 
         // 토큰 저장
         localStorage.setItem('access-token', res.data.accessToken);
