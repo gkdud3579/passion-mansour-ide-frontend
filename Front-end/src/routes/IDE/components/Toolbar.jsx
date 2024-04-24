@@ -2,14 +2,10 @@ import { useMutation } from 'react-query';
 import { saveFileContent, playFileContent } from '../api';
 import styles from './Toolbar.module.css';
 import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/Icons';
+import { useCallback } from 'react';
+import api from '../../../api/api';
 
-const Toolbar = ({
-  state,
-  isChatVisible,
-  onChatToggle,
-  projectData,
-}) => {
-
+const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId }) => {
   const { mutate: saveContent, isLoading: isSavingLoading } = useMutation(saveFileContent, {
     onSuccess: (data) => {
       console.log('Save successful:', data);
@@ -34,20 +30,28 @@ const Toolbar = ({
     },
   });
 
-  if (!projectData) return null;
-
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     try {
-      await saveContent({
-        projectId: projectData.id,
+      // await saveContent({
+      //   projectId: projectData.id,
+      //   language: state.language,
+      //   fileContent: state.fileContent,
+      // });
+      const infoData = {
         language: state.language,
         fileContent: state.fileContent,
-      });
+      };
+
+      console.log('infoData : ', infoData);
+
+      const res = await api.patch(`/projects/${projectId}/save`, infoData);
+
+      console.log('save : ', res);
     } catch (error) {
       console.error('Error saving file:', error);
       alert('Error saving file: ' + error.message);
     }
-  };
+  }, [state, projectId]);
 
   const handlePlay = async () => {
     try {
@@ -79,18 +83,16 @@ const Toolbar = ({
         </div>
       </div>
       <div className={styles.rightButtons}>
-        <button onClick={onChatToggle}
-          className={`${styles.icoBox} ${isChatVisible ? styles.btnActive : styles.btnNone}`}>
+        <button
+          onClick={onChatToggle}
+          className={`${styles.icoBox} ${isChatVisible ? styles.btnActive : styles.btnNone}`}
+        >
           <CommentIcon size={20} />
         </button>
-        <button onClick={handleSave}
-          className={`${styles.icoBox} ${styles.btnNone}`}
-          disabled={isSavingLoading}>
+        <button onClick={handleSave} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isSavingLoading}>
           <SaveIcon size={18} />
         </button>
-        <button onClick={handlePlay}
-          className={`${styles.icoBox} ${styles.btnNone}`}
-          disabled={isPlayingLoading}>
+        <button onClick={handlePlay} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isPlayingLoading}>
           <PlayIcon size={15} />
         </button>
       </div>
