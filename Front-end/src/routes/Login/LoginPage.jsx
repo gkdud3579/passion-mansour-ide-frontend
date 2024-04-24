@@ -38,6 +38,7 @@ const LoginPage = () => {
           headers: {
             'Content-Type': 'application/json',
           },
+          withCredentials: false,
         });
 
         // 토큰 저장

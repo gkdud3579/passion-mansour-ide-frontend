@@ -86,7 +86,10 @@ export default function Mypage() {
     } else {
       axios
         .get(`${baseURL}/members/check-nickname?nickName=${form.nickname}`, {
-          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: false,
         })
         .then((res) => {
           if (res.status === 200) {

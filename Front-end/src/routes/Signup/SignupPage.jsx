@@ -33,7 +33,7 @@ const SignupPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('2024-04-24 11시 배포 완료');
+    console.log('2024-04-24 11시 배포 완료 2');
 
     if (localStorage.getItem('access-token')) {
       navigate('/main');
@@ -139,7 +139,7 @@ const SignupPage = () => {
         .get(
           `http://ec2-54-180-141-29.ap-northeast-2.compute.amazonaws.com/api/members/check-nickname?nickName=${form.nickname}`,
           {
-            withCredentials: true,
+            withCredentials: false,
           },
         )
         .then((res) => {
@@ -174,7 +174,7 @@ const SignupPage = () => {
         .get(
           `http://ec2-54-180-141-29.ap-northeast-2.compute.amazonaws.com/api/members/check-loginId?loginId=${form.id}`,
           {
-            withCredentials: true,
+            withCredentials: false,
           },
         )
         .then((res) => {
@@ -213,7 +213,7 @@ const SignupPage = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            withCredentials: true,
+            withCredentials: false,
           },
         );
 
@@ -249,7 +249,7 @@ const SignupPage = () => {
             className={styles.inputText}
             value={form.name}
             onChange={onChangeName}
-            placeholder="이름"
+            placeholder="이름2"
           />
           {msg.name.length > 0 && (
             <span className={!isState.isName ? styles.errMsg : styles.successMsg}>{msg.name}</span>

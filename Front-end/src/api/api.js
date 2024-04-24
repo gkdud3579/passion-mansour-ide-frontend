@@ -6,7 +6,7 @@ const api = axios.create({
     'content-type': 'application/json;charset=UTF-8',
     accept: 'application/json,',
   },
-  withCredentials: true, // cors err 피하기
+  withCredentials: false, // cors err 피하기
 });
 
 // access token 재발급
