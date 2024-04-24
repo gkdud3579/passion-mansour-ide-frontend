@@ -12,7 +12,7 @@
   margin-bottom: 68px;
 }
 
-.fromDiv {
+.formDiv {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -20,17 +20,21 @@
 }
 
 .inputBox {
+  margin-bottom: 24px;
+}
+
+.inputText {
   display: block;
   width: 100%;
   height: 72px;
-  border: 1px solid #d5d5d5;
+  border: 1px solid var(--border);
   border-radius: 5px;
-  background: #fff;
-  color: #000;
+  background: var(--input-bg);
+  color: var(--color);
   font-size: 20px;
-  margin-bottom: 24px;
   padding: 6px 12px;
   box-sizing: border-box;
+  margin-bottom: 6px;
 }
 
 .inputBox::placeholder {
@@ -41,12 +45,35 @@
   margin-bottom: 32;
 }
 
+.isChkBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chkBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 72px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 16px;
+  border: none;
+  border-radius: 5px;
+  background: var(--primary);
+  cursor: pointer;
+}
+
 .buttonBox {
   display: block;
   width: 440px;
   height: 78px;
   font-size: 20px;
-  color: #7c7c7c;
+  color: #fff;
+  background: var(--primary);
   border: none;
   border-radius: 5px;
   box-sizing: border-box;
@@ -54,9 +81,23 @@
   cursor: pointer;
 }
 
+.buttonBox[disabled] {
+  pointer-events: none;
+  color: var(--login-btn-color);
+  background: var(--login-btn);
+}
+
 .spanMsg {
   font-size: 14px;
-  color: #444;
+  color: var(--login-msg);
+}
+
+.successMsg {
+  color: var(--primary);
+}
+
+.errMsg {
+  color: #f00;
 }
 
 .linkMsg {

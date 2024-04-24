@@ -6,78 +6,51 @@ import MyPage from './routes/Mypage/Mypage';
 import LoginPage from './routes/Login/LoginPage';
 import NotFound from './routes/NotFound/NotFound';
 import './global.css';
-import { useEffect } from 'react';
-// import { AuthProvider } from './contexts/AuthContext';
-// import PrivateRoute from './utils/PrivateRoute';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import PrivateContext from './contexts/privateContext';
+import { useEffect, useState } from 'react';
+import { ThemeContext } from '@emotion/react';
+import PwChange from './routes/PwChange/PwChange';
+import TestService from './routes/TestService/TestService';
+
+const queryClient = new QueryClient();
 
 function App() {
-  // useEffect(() => {
-  //   userInfo.theme;
-  // }, []);
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
-  // useEffect(() => {
-  //   if (userInfo.theme === 'dark') {
-  //     document.body.style.backgroundColor = '#27272A';
-  //     document.body.style.color = 'white';
-  //   } else {
-  //     document.body.style.backgroundColor = 'white';
-  //     document.body.style.color = '#27272A';
-  //   }
-  // }, []);
+  // dark모드일 경우 스타일링 주기
+  useEffect(() => {
+    if (localStorage.getItem('theme')) {
+      setIsDark(true);
+      document.querySelector('html').classList.add('dark');
+    } else {
+      setIsDark(false);
+      document.querySelector('html').classList.remove('dark');
+    }
+  }, [isDark]);
 
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route exact path="/" element={<LoginPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/main" element={<MainPage />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/ide" element={<IDEPage />} />
-          <Route path="/*" element={<NotFound />} />
-        </Routes>
+        <QueryClientProvider client={queryClient}>
+          <PrivateContext.Provider value={{ isPrivate, setIsPrivate }}>
+            <ThemeContext.Provider value={{ isDark, setIsDark }}>
+              <Routes>
+                <Route exact path="/" element={<LoginPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+                <Route path="/main" element={<MainPage />} />
+                <Route path="/mypage" element={<MyPage />} />
+                <Route path="/pwChange" element={<PwChange />} />
+                <Route path="/ide/:id" element={<IDEPage />} />
+                <Route path="/test/:id" element={<TestService />} />
+                <Route path="/*" element={<NotFound />} />
+              </Routes>
+            </ThemeContext.Provider>
+          </PrivateContext.Provider>
+        </QueryClientProvider>
       </BrowserRouter>
-
-      {/*
-
-      
-
-      <Router>
-        <AuthProvider>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/join" element={<JoinPage />} />
-            <PrivateRoute path="/main" element={<MainPage />} />
-            <PrivateRoute path="/mypage" element={<MyPage />} />
-            <PrivateRoute path="/ide" element={<IDEPage />} />
-            <Route path="*" element={<Navigate to="/login" />} />
-          </Routes>
-        </AuthProvider>
-      </Router>
-
-      
-
-
-      <Switch> 5xx 버전에만 동작
-        <Redirect exact path="/" to="/login" />
-        <Route path="/login" component={LoginPage} />
-        <Route path="/join" component={JoinPage} />
-        <Route path="/main" component={MainPage} />
-        <Route path="/ide" component={IDEPage} />
-        <Route path="/mypage" component={MyPage} />
-      </Switch>
- 
-      <Router>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/ide" element={<IDEPage />} />
-          <Route path="/join" element={<JoinPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/mypage" element={<MyPage />} />
-        </Routes>
-      </Router>
-      */}
     </>
   );
 }

@@ -3,7 +3,21 @@ import { playFileContent, saveFileContent } from '../api';
 import styles from './Toolbar.module.css';
 import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/Icons';
 
+<<<<<<< HEAD
 const Toolbar = ({ state, onChatToggle, projectId, language, fileContent, file }) => {
+=======
+const Toolbar = ({
+  onPlaySuccess,
+  state,
+  isChatVisible,
+  onChatToggle,
+  projectId,
+  language,
+  fileContent,
+  file,
+  projectData,
+}) => {
+>>>>>>> 1fff7c3c72ae0bafcc70f751fa9a30c8843e76c7
   const { mutate: saveContent, isLoading: isSavingLoading } = useMutation(saveFileContent, {
     onSuccess: (data) => {
       console.log('Save successful:', data);
@@ -26,6 +40,7 @@ const Toolbar = ({ state, onChatToggle, projectId, language, fileContent, file }
       alert('Error playing file: ' + error.message);
     },
   });
+<<<<<<< HEAD
 
   const handleSave = () => {
     // const fileContent = editorRef.current.getValue();
@@ -37,30 +52,74 @@ const Toolbar = ({ state, onChatToggle, projectId, language, fileContent, file }
   const handlePlay = () => {
     console.log(state);
     playContent({ projectId, language, file });
+=======
+  
+
+  const handleSave = async () => {
+    try {
+      const savedData = await saveFileContent({
+        projectId: projectData.id, // 현재 프로젝트의 ID
+        language: state.language,
+        fileContent: state.fileContent,
+      });
+      console.log('File saved successfully:', savedData);
+      alert('File saved successfully!');
+    } catch (error) {
+      console.error('Error saving file:', error);
+      alert('Error saving file: ' + error.message);
+    }
+  };
+  
+
+  const handlePlay = async () => {
+    setIsRunning(true);
+    try {
+      const result = await executeCode(state.language, state.fileContent);
+      setOutput(result.output);
+    } catch (error) {
+      console.error('Error executing code: ', error);
+    }
+    setIsRunning(false);
+>>>>>>> 1fff7c3c72ae0bafcc70f751fa9a30c8843e76c7
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.leftButtons}>
-        <button className={styles.exitButton}>
+        <button className={`${styles.icoBox} ${styles.btnNone}`}>
           <ExitIcon size={20} />
         </button>
-        <div className={styles.status}>
-          <span>공개</span>
-          <span>JavaScript</span>
-          <span>4/5</span>
+        <div className={styles.infoBox}>
+          <div className={styles.status}>
+            <span className={`${styles.tag} ${projectData.isLock ? 'private' : 'public'}`}>
+              {projectData.isLock ? '비공개' : '공개'}
+            </span>
+            <span className={`${styles.tag} ${projectData.tagLanguage}`}>{projectData.tagLanguage}</span>
+            <span style={{ display: 'none' }}>4/5</span>
+          </div>
+          <span className={styles.title}>{projectData.title}</span>
         </div>
-        <span className={styles.title}>백준 레벨 1 문제 1 문제 풀이합니다.</span>
       </div>
       <div className={styles.rightButtons}>
-        <button onClick={onChatToggle}>
+        <button
+          onClick={onChatToggle}
+          className={`${styles.icoBox} ${isChatVisible ? styles.btnActive : styles.btnNone}`}
+        >
           <CommentIcon size={20} />
         </button>
+<<<<<<< HEAD
         <button onClick={handleSave} disabled={isSavingLoading}>
           <SaveIcon size={20} />
         </button>
         <button onClick={handlePlay} disabled={isPlayingLoading}>
           <PlayIcon size={20} />
+=======
+        <button onClick={handleSave} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isSavingLoading}>
+          <SaveIcon size={18} />
+        </button>
+        <button onClick={handlePlay} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isPlayingLoading}>
+          <PlayIcon size={15} />
+>>>>>>> 1fff7c3c72ae0bafcc70f751fa9a30c8843e76c7
         </button>
       </div>
     </div>
