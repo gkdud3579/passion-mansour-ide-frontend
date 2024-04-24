@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { LANGUAGE_VERSIONS } from './Constants';
+import api from '../../api/api';
 
 // Piston API용 인스턴스
 const PistonAPI = axios.create({
@@ -8,7 +9,7 @@ const PistonAPI = axios.create({
 
 // 새 백엔드 서버용 인스턴스
 const BackendAPI = axios.create({
-  baseURL: 'https://your-new-backend-url.com/api',
+  baseURL: 'http://ec2-54-180-141-29.ap-northeast-2.compute.amazonaws.com',
 });
 
 export const executeCode = async (language, sourceCode) => {
@@ -30,16 +31,14 @@ export const executeCode = async (language, sourceCode) => {
 // };
 
 export const saveFileContent = async ({ projectId, language, fileContent = '' }) => {
-    // URL에서 쿼리 파라미터로 language와 fileContent를 전달합니다.
-    const url = `/projects/${projectId}/save?language=${encodeURIComponent(language)}&fileContent=${encodeURIComponent(fileContent)}`;
-    
-    // 요청 본문에는 projectId만 포함시킵니다.
-    const response = await BackendAPI.patch(url, {
-      projectId
-    });
+  // 요청 본문에는 projectId, language, fileContent 포함
+  const response = await BackendAPI.patch(`/projects/${projectId}/save`, {
+    language,
+    fileContent
+  });
   
-    return response.data;
-  };
+  return response.data;
+};
 
 export const playFileContent = async ({ projectId, language, file = '' }) => {
     const response = await BackendAPI.post(`/projects/{projectId}/run`, {

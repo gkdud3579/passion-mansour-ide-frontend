@@ -25,6 +25,8 @@ const IDEPage = () => {
   ]);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const stompClient = useRef(null);
+  const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
+
   // project 정보
   // 현재 활성 사용자 변경 (예시로 토글 방식 구현)
   const toggleUser = () => {
@@ -33,7 +35,7 @@ const IDEPage = () => {
 
   useEffect(() => {
     const connectWebSocket = () => {
-      const socket = new SockJS('http://localhost:7382/websocket');
+      const socket = new SockJS(websocketUrl);
       stompClient.current = Stomp.over(socket);
       stompClient.current.connect({}, onConnected, onError);
     };

@@ -36,17 +36,33 @@ const Toolbar = ({
       alert('Error playing file: ' + error.message);
     },
   });
+  
 
-  const handleSave = () => {
-    // const fileContent = editorRef.current.getValue();
-    // console.log('Sending data to server:', { projectId, language, fileContent });
-    console.log(state);
-    saveContent({ projectId, language, fileContent });
+  const handleSave = async () => {
+    try {
+      const savedData = await saveFileContent({
+        projectId: projectData.id, // 현재 프로젝트의 ID
+        language: state.language,
+        fileContent: state.fileContent,
+      });
+      console.log('File saved successfully:', savedData);
+      alert('File saved successfully!');
+    } catch (error) {
+      console.error('Error saving file:', error);
+      alert('Error saving file: ' + error.message);
+    }
   };
+  
 
-  const handlePlay = () => {
-    console.log(state);
-    playContent({ projectId, language, file });
+  const handlePlay = async () => {
+    setIsRunning(true);
+    try {
+      const result = await executeCode(state.language, state.fileContent);
+      setOutput(result.output);
+    } catch (error) {
+      console.error('Error executing code: ', error);
+    }
+    setIsRunning(false);
   };
 
   return (

@@ -10,13 +10,13 @@ import { SearchIcon } from '../../../../components/Icons';
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
 
-const Chatting = ({ projectId = 1, userId = 1 }) => {
+const Chatting = ({ projectId, userId, websocketUrl }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const stompClient = useRef(null);
 
   useEffect(() => {
-    const socket = new SockJS('http://localhost:7382/websocket');
+    const socket = new SockJS(websocketUrl);
     stompClient.current = Stomp.over(socket);
 
     stompClient.current.connect(
