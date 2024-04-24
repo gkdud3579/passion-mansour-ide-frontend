@@ -8,7 +8,7 @@ const PistonAPI = axios.create({
 
 // 새 백엔드 서버용 인스턴스
 const BackendAPI = axios.create({
-  baseURL: 'http://ec2-54-180-141-29.ap-northeast-2.compute.amazonaws.com/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 export const executeCode = async (language, sourceCode) => {
@@ -33,17 +33,17 @@ export const saveFileContent = async ({ projectId, language, fileContent = '' })
   // 요청 본문에는 projectId, language, fileContent 포함
   const response = await BackendAPI.patch(`/projects/${projectId}/save`, {
     language,
-    fileContent
+    fileContent,
   });
-  
+
   return response.data;
 };
 
 export const playFileContent = async ({ projectId, language, file = '' }) => {
-    const response = await BackendAPI.post(`/projects/{projectId}/run`, {
-      projectId,
-      language,
-      file
-    });
-    return response.data;
-  };
+  const response = await BackendAPI.post(`/projects/{projectId}/run`, {
+    projectId,
+    language,
+    file,
+  });
+  return response.data;
+};

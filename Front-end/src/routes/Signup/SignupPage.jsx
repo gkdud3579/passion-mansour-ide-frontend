@@ -134,14 +134,10 @@ const SignupPage = () => {
       setIsState({ ...isState, isNickname: false });
       setMsg({ ...msg, nickname: '최소 2자에서 최대 12자 입니다' });
     } else {
-      //.get(`${baseURL}/members/check-nickname?nickName=${form.nickname}`, {
       axios
-        .get(
-          `http://ec2-54-180-141-29.ap-northeast-2.compute.amazonaws.com/api/members/check-nickname?nickName=${form.nickname}`,
-          {
-            withCredentials: false,
-          },
-        )
+        .get(`${baseURL}/members/check-nickname?nickName=${form.nickname}`, {
+          withCredentials: false,
+        })
         .then((res) => {
           if (res.status === 200) {
             setIsState({ ...isState, isNickname: true });
@@ -169,14 +165,10 @@ const SignupPage = () => {
       setIsState({ ...isState, isId: false });
       setMsg({ ...msg, id: '영문+숫자 조합으로 입력해주세요' });
     } else {
-      // .get(`${baseURL}/members/check-loginId?loginId=${form.id}`, {
       axios
-        .get(
-          `http://ec2-54-180-141-29.ap-northeast-2.compute.amazonaws.com/api/members/check-loginId?loginId=${form.id}`,
-          {
-            withCredentials: false,
-          },
-        )
+        .get(`${baseURL}/members/check-loginId?loginId=${form.id}`, {
+          withCredentials: false,
+        })
         .then((res) => {
           if (res.status === 200) {
             setIsState({ ...isState, isId: true });
@@ -205,17 +197,12 @@ const SignupPage = () => {
           nickName: form.nickname,
         };
 
-        // axios.post(`${baseURL}/members/register`, userInfo, {});
-        const res = await axios.post(
-          `http://ec2-54-180-141-29.ap-northeast-2.compute.amazonaws.com/api/members/register`,
-          userInfo,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: false,
+        const res = await axios.post(`${baseURL}/members/register`, userInfo, {
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+          withCredentials: false,
+        });
 
         // 토큰 저장
         localStorage.setItem('access-token', res.data.accessToken);
@@ -249,7 +236,7 @@ const SignupPage = () => {
             className={styles.inputText}
             value={form.name}
             onChange={onChangeName}
-            placeholder="이름2"
+            placeholder="이름"
           />
           {msg.name.length > 0 && (
             <span className={!isState.isName ? styles.errMsg : styles.successMsg}>{msg.name}</span>
