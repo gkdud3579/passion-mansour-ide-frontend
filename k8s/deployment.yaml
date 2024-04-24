@@ -15,3 +15,14 @@ spec:
         - name: passion-mansour-ide-frontend
           image: krmp-d2hub-idock.9rum.cc/dev-test/repo_c29f411a4deb
           imagePullPolicy: Always
+          env:
+            - name: VITE_API_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: VITE_API_BASE_URL
+            - name: VITE_WEBSOCKET_URL
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: VITE_WEBSOCKET_URL
