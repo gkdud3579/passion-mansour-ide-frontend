@@ -2,13 +2,10 @@ import { useMutation } from 'react-query';
 import { saveFileContent, playFileContent } from '../api';
 import styles from './Toolbar.module.css';
 import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/Icons';
+import { useCallback } from 'react';
+import api from '../../../api/api';
 
-const Toolbar = ({
-  state,
-  isChatVisible,
-  onChatToggle,
-  projectData,
-}) => {
+const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId }) => {
   const { mutate: saveContent, isLoading: isSavingLoading } = useMutation(saveFileContent, {
     onSuccess: (data) => {
       console.log('Save successful:', data);
@@ -20,42 +17,55 @@ const Toolbar = ({
     },
   });
 
-  const { mutate: playContent, isLoading: isPlayingLoading } = useMutation(playFileContent, {
-    onSuccess: (data) => {
-      console.log('Play successful:', data);
-      // Assume onPlaySuccess function is defined elsewhere or pass it as a prop
-      // onPlaySuccess(data);
-      alert('Play successful!');
+  const { mutate: playContent, isLoading: isPlayingLoading } = useMutation(
+    () => {
+      return api.post('/execute', { 
+        language: state.language, 
+        content: state.fileContent 
+      });
     },
-    onError: (error) => {
-      console.error('Error playing file:', error);
-      alert('Error playing file: ' + error.message);
-    },
-  });
+    {
+      onSuccess: (data) => {
+        console.log('Play successful:', data);
+        onPlaySuccess(data); // Make sure this function is passed as a prop and defined to handle the successful response
+      },
+      onError: (error) => {
+        console.error('Error playing file:', error);
+        alert('Error playing file: ' + error.response.data.stderr);
+      },
+    }
+  );
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     try {
-      await saveContent({
-        projectId: projectData.id,
+      // await saveContent({
+      //   projectId: projectData.id,
+      //   language: state.language,
+      //   fileContent: state.fileContent,
+      // });
+      const infoData = {
         language: state.language,
         fileContent: state.fileContent,
-      });
+      };
+
+      console.log('infoData : ', infoData);
+
+      const res = await api.patch(`/projects/${projectId}/save`, infoData);
+
+      console.log('save : ', res);
     } catch (error) {
       console.error('Error saving file:', error);
       alert('Error saving file: ' + error.message);
     }
-  };
+  }, [state, projectId]);
 
   const handlePlay = async () => {
     try {
-      await playContent({
-        projectId: projectData.id,
-        language: state.language,
-        fileContent: state.fileContent, // Assuming fileContent is correct
-      });
+      // Directly call the mutate function without waiting for it as react-query handles the promise.
+      playContent();
     } catch (error) {
-      console.error('Error playing file:', error);
-      alert('Error playing file: ' + error.message);
+      console.error('Error executing code:', error);
+      alert('Error executing code: ' + error.message);
     }
   };
 
@@ -76,18 +86,16 @@ const Toolbar = ({
         </div>
       </div>
       <div className={styles.rightButtons}>
-        <button onClick={onChatToggle}
-          className={`${styles.icoBox} ${isChatVisible ? styles.btnActive : styles.btnNone}`}>
+        <button
+          onClick={onChatToggle}
+          className={`${styles.icoBox} ${isChatVisible ? styles.btnActive : styles.btnNone}`}
+        >
           <CommentIcon size={20} />
         </button>
-        <button onClick={handleSave}
-          className={`${styles.icoBox} ${styles.btnNone}`}
-          disabled={isSavingLoading}>
+        <button onClick={handleSave} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isSavingLoading}>
           <SaveIcon size={18} />
         </button>
-        <button onClick={handlePlay}
-          className={`${styles.icoBox} ${styles.btnNone}`}
-          disabled={isPlayingLoading}>
+        <button onClick={handlePlay} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isPlayingLoading}>
           <PlayIcon size={15} />
         </button>
       </div>

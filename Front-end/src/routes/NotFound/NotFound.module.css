@@ -9,6 +9,7 @@
 
 .title {
   width: 320px;
+  color: var(--color);
   font-size: 54px;
   font-weight: 800;
   margin-bottom: 16px;
@@ -17,6 +18,7 @@
 
 .msg {
   width: 320px;
+  color: var(--color);
   font-size: 16px;
   margin-bottom: 72px;
   text-align: center;

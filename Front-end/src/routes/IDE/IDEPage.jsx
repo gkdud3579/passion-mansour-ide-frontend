@@ -1,23 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Editor from './components/codeEditor/Editor';
-// import Toolbar from './components/Toolbar';
+import Toolbar from './components/Toolbar';
 import Output from './components/codeEditor/Output';
 import Chatting from './components/modal/Chatting';
 import { ChakraProvider } from '@chakra-ui/react';
 import styles from './IDEPage.module.css';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
-import { getPrject } from '../../api/serviceApi';
 import { useParams } from 'react-router-dom';
-// /ide/2
+import api from '../../api/api';
 
 const IDEPage = () => {
   const queryClient = new QueryClient();
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [output, setOutput] = useState('');
   const [projectData, setProjectData] = useState({});
-  const { data } = useParams();
+  const { id: projectId } = useParams();
   const [users, setUsers] = useState([
     { id: 'user1', role: 'master' },
     { id: 'user2', role: 'normal' },
@@ -25,7 +24,9 @@ const IDEPage = () => {
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const stompClient = useRef(null);
   const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
-console.log(projectData);
+  console.log('2024-04-25 11:30');
+  console.log(projectData);
+
   // project 정보
   // 현재 활성 사용자 변경 (예시로 토글 방식 구현)
   // const toggleUser = () => {
@@ -33,6 +34,8 @@ console.log(projectData);
   // };
 
   useEffect(() => {
+    console.log('2024-04-25 11:30');
+
     const connectWebSocket = () => {
       const socket = new SockJS(websocketUrl);
       stompClient.current = Stomp.over(socket);
@@ -63,17 +66,13 @@ console.log(projectData);
       setTimeout(connectWebSocket, 5000); // Try to reconnect every 5 seconds
     };
 
-    // API 연동 - 24.04.24 12:30 추가 // 일단 실패가 뜨니 오류 뜰 때 더미 데이터 넣어두었습니다
-    getPrject(data)
-      .then((res) => setProjectData(res.data))
-      .catch((err) =>
-        setProjectData({
-          id: 0,
-          title: '백준 레벨1 문제 1 문제 풀이 합니다.',
-          isLock: false,
-          tagLanguage: 'javascript',
-        }),
-      );
+    api
+      .get(`/projects/get/${projectId}`)
+      .then((res) => {
+        console.log('rrrr : ', res);
+        setProjectData(res.data);
+      })
+      .catch((err) => console.log('eeeeee : ', err));
 
     connectWebSocket();
 
@@ -85,17 +84,11 @@ console.log(projectData);
     };
   }, [users, currentUserIndex]);
 
-  // const handlePlaySuccess = (data) => {
-  //   if (data.stdout) {
-  //     setOutput(data.stdout);
-  //   } else if (data.stderr) {
-  //     setOutput(data.stderr);
-  //   } else if (data.exception) {
-  //     setOutput(data.exception);
-  //   }
-  // };
+  const handlePlaySuccess = (data) => {
+    setOutput(data.stdout || data.stderr || data.exception);
+  };
 
-  // const [isRunning, setIsRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
   const [state, setState] = useState({
     language: 'javascript',
     fileContent: '',
@@ -105,32 +98,33 @@ console.log(projectData);
     },
   });
 
-  // const runCode = async () => {
-  //   setIsRunning(true);
-  //   try {
-  //     const result = await executeCode(state.language, state.fileContent);
-  //     setOutput(result.output);
-  //   } catch (error) {
-  //     console.error('Error executing code: ', error);
-  //   }
-  //   setIsRunning(false);
-  // };
+  const runCode = async () => {
+    setIsRunning(true);
+    try {
+      const result = await executeCode(state.language, state.fileContent);
+      setOutput(result.output);
+    } catch (error) {
+      console.error('Error executing code: ', error);
+    }
+    setIsRunning(false);
+  };
 
-  // const toggleChat = () => {
-  //   setIsChatVisible(!isChatVisible);
-  // };
+  const toggleChat = () => {
+    setIsChatVisible(!isChatVisible);
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
         <div className={styles.page}>
-          {/* <Toolbar
+          <Toolbar
             state={state}
             isChatVisible={isChatVisible}
             onChatToggle={toggleChat}
             onPlaySuccess={handlePlaySuccess}
             projectData={projectData}
-          /> */}
+            projectId={projectId}
+          />
           <div className={styles.main}>
             <Editor
               state={state}

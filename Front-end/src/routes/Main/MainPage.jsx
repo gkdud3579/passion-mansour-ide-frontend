@@ -10,7 +10,6 @@ import Create from './components/modal/Create';
 import TabMenu from './components/TabMenu';
 import axios from 'axios';
 import api from '../../api/api';
-import PrivateContext from '../../contexts/privateContext';
 import { getMyUser, postProjects } from '../../api/serviceApi';
 
 export default function MainPage() {
@@ -31,16 +30,16 @@ export default function MainPage() {
       api
         .post('/board', getData)
         .then((res) => {
-          console.log(res);
-          // setItems(res.data);
+          console.log('12313113123123121 : ', res);
+          setItems(res.data.projects);
         })
         .catch((err) => console.log(err));
     } else {
       api
         .post('/board', getData)
         .then((res) => {
-          console.log(res);
-          setItems(res.data);
+          console.log('12313113123123121 : ', res);
+          setItems(res.data.projects);
         })
         .catch((err) => console.log(err));
     }
