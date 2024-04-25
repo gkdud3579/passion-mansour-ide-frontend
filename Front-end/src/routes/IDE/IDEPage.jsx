@@ -14,7 +14,7 @@ import api from '../../api/api';
 const IDEPage = () => {
   const queryClient = new QueryClient();
   const [isChatVisible, setIsChatVisible] = useState(false);
-  const [output, setOutput] = useState('');
+  const [output, setOutput] = useState({});
   const [projectData, setProjectData] = useState({});
   const { id: projectId } = useParams();
   const [permission, setPermission] = useState('');
@@ -141,6 +141,7 @@ const IDEPage = () => {
             onPlaySuccess={handlePlaySuccess}
             projectData={projectData}
             projectId={projectId}
+            setOutput={setOutput}
           />
           <div className={styles.main}>
             <Editor

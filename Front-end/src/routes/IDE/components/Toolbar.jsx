@@ -5,7 +5,7 @@ import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/I
 import { useCallback } from 'react';
 import api from '../../../api/api';
 
-const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId }) => {
+const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId, setOutput }) => {
   const { mutate: saveContent, isLoading: isSavingLoading } = useMutation(saveFileContent, {
     onSuccess: (data) => {
       console.log('Save successful:', data);
@@ -45,7 +45,7 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId })
       // });
       const infoData = {
         language: state.language,
-        fileContent: state.fileContent,
+        content: state.file.content,
       };
 
       console.log('infoData : ', infoData);
@@ -62,7 +62,19 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId })
   const handlePlay = async () => {
     try {
       // Directly call the mutate function without waiting for it as react-query handles the promise.
-      playContent();
+      // playContent();
+      const infoData = {
+        language: state.language,
+        content: state.file.content,
+      };
+
+      console.log('infoData : ', infoData);
+
+      const res = await api.post(`/projects/${projectId}/run`, infoData);
+      console.log('ressssssss : ', res.data);
+      setOutput(res.data);
+
+      console.log('save : ', res);
     } catch (error) {
       console.error('Error executing code:', error);
       alert('Error executing code: ' + error.message);
