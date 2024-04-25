@@ -22,6 +22,7 @@ const IDEPage = () => {
   const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
   const [userData, setUserData] = useState({});
   console.log(projectData);
+
   useEffect(() => {
     console.log('projectId:', projectId);
     const userInfo = JSON.parse(localStorage.getItem('ud'));
@@ -121,11 +122,13 @@ const IDEPage = () => {
           <Toolbar
             state={state}
             isChatVisible={isChatVisible}
+            setIsChatVisible={setIsChatVisible}
             onChatToggle={toggleChat}
             onPlaySuccess={handlePlaySuccess}
             projectData={projectData}
             projectId={projectId}
             setOutput={setOutput}
+            userData={userData}
           />
           <div className={styles.main}>
             <Editor

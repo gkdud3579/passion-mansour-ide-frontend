@@ -47,6 +47,10 @@
   align-items: flex-start;
 }
 
+.boldText {
+  font-weight: bold;
+}
+
 .myMessage {
   align-self: flex-end;
 }

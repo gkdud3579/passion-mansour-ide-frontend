@@ -6,7 +6,17 @@ import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/I
 import { useCallback } from 'react';
 import api from '../../../api/api';
 
-const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId, setOutput, permission }) => {
+const Toolbar = ({
+  state,
+  isChatVisible,
+  setIsChatVisible,
+  projectData,
+  projectId,
+  setOutput,
+  permission,
+  stompClient,
+  userData,
+}) => {
   const navigate = useNavigate(); // 페이지 이동을 위한 history 객체 사용
 
   const handleExit = async () => {
@@ -22,6 +32,23 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId, s
       navigate('/main');
     }
   };
+
+  const handleChatToggle = useCallback(() => {
+    setIsChatVisible(!isChatVisible);
+    // 채팅 상태에 따라 메시지 타입 결정
+    const messageType = !isChatVisible ? 'JOIN' : 'LEAVE';
+    const endpoint = messageType === 'JOIN' ? `/app/chat/join/${projectId}` : `/app/chat/leave/${projectId}`;
+    const message = {
+      userId: userData.id, // 사용자 ID
+      type: messageType,
+      timestamp: new Date().toISOString(),
+    };
+
+    // 메시지 전송
+    if (stompClient.current && stompClient.current.connected) {
+      stompClient.current.send(endpoint, JSON.stringify(message), {});
+    }
+  }, [isChatVisible, setIsChatVisible, userData, projectId, stompClient]);
 
   const { mutate: saveContent, isLoading: isSavingLoading } = useMutation(saveFileContent, {
     onSuccess: (data) => {
@@ -109,7 +136,7 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId, s
       </div>
       <div className={styles.rightButtons}>
         <button
-          onClick={onChatToggle}
+          onClick={handleChatToggle}
           className={`${styles.icoBox} ${isChatVisible ? styles.btnActive : styles.btnNone}`}
         >
           <CommentIcon size={20} />

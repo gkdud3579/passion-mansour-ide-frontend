@@ -107,7 +107,7 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
           >
             <div className={styles.messageBubble}>
               <div className={styles.messageInfo}>
-                {message.isOwn ? <span>나</span> : <span className={styles.userName}>{message.sender}</span>}
+                {message.isOwn ? <span className={styles.boldText}>나</span> : <span className={styles.userName}>{message.sender}</span>}
                 <span className={styles.messageTimestamp}>{dayjs(message.timestamp).fromNow()}</span>
               </div>
               <p className={styles.messageText}>{message.text}</p>
