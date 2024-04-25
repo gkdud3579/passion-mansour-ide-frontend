@@ -21,7 +21,7 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId })
     () => {
       return api.post('/execute', { 
         language: state.language, 
-        content: state.fileContent 
+        content: state.content 
       });
     },
     {

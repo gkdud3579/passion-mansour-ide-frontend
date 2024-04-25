@@ -29,11 +29,11 @@ export const executeCode = async (language, sourceCode) => {
 //   return response.data;
 // };
 
-export const saveFileContent = async ({ projectId, language, fileContent = '' }) => {
+export const saveFileContent = async ({ projectId, language, content = '' }) => {
   // 요청 본문에는 projectId, language, fileContent 포함
   const response = await BackendAPI.patch(`/projects/${projectId}/save`, {
     language,
-    fileContent,
+    content,
   });
 
   return response.data;

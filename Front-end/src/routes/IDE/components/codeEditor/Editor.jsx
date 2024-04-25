@@ -24,7 +24,7 @@ const Editor = ({ state, setState, isMaster, stompClient }) => {
     setState({
       ...state,
       language: lang,
-      fileContent: CODE_SNIPPETS[lang],
+      content: CODE_SNIPPETS[lang],
       file: {
         name: `Main.${lang}`,
         content: CODE_SNIPPETS[lang],
@@ -35,7 +35,7 @@ const Editor = ({ state, setState, isMaster, stompClient }) => {
   const handleEditorChange = (newValue) => {
     setState({
       ...state,
-      fileContent: newValue,
+      content: newValue,
       file: {
         ...state.file,
         content: newValue,
@@ -62,7 +62,7 @@ const Editor = ({ state, setState, isMaster, stompClient }) => {
         height="100%"
         theme={isTheme}
         language={state.language}
-        value={state.fileContent}
+        value={state.content}
         defaultValue={CODE_SNIPPETS[language]}
         options={{ readOnly: !isMaster }}
         onChange={handleEditorChange}

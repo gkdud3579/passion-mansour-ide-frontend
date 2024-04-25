@@ -101,7 +101,7 @@ const IDEPage = () => {
   const runCode = async () => {
     setIsRunning(true);
     try {
-      const result = await executeCode(state.language, state.fileContent);
+      const result = await playFileContent(state.language, state.content);
       setOutput(result.output);
     } catch (error) {
       console.error('Error executing code: ', error);
