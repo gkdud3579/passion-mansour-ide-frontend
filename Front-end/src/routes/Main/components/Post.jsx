@@ -49,9 +49,7 @@ const Post = ({ type, data, onClickPriviateOpen }) => {
         <div className={styles.itemBottomBox}>
           <span>{data.host.nickName}</span>
           <b className={styles.space}>·</b>
-          <span style={{ display: 'none' }}>
-            {data.users.length + 1}명 / {data.maxUser}명
-          </span>
+          <span style={{ display: 'none' }}>{/* {data.users.length + 1}명 / {data.maxUser}명 */}</span>
           <b className={styles.space} style={{ display: 'none' }}>
             {' '}
             ·{' '}

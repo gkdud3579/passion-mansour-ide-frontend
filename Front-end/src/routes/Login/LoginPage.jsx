@@ -34,7 +34,7 @@ const LoginPage = () => {
         };
 
         // 로그인 요청 보내기
-        const res = await axios.post(`${baseURL}/members/login`, userInfo, {
+        const res = await axios.post(`${baseURL}/members/login1`, userInfo, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -43,7 +43,7 @@ const LoginPage = () => {
 
         // 토큰 저장
         localStorage.setItem('access-token', res.data.accessToken);
-        localStorage.setItem('ud', res.data.members);
+        localStorage.setItem('ud', JSON.stringify(res.data.member));
 
         // 로그인 완료 메시지 출력
         console.log(res.data);

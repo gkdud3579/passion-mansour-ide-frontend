@@ -206,7 +206,7 @@ const SignupPage = () => {
 
         // 토큰 저장
         localStorage.setItem('access-token', res.data.accessToken);
-        localStorage.setItem('ud', res.data.member);
+        localStorage.setItem('ud', JSON.stringify(res.data.member));
 
         window.alert('회원가입이 완료되었습니다.');
 

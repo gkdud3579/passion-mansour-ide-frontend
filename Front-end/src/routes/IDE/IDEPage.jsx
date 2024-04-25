@@ -17,6 +17,7 @@ const IDEPage = () => {
   const [output, setOutput] = useState('');
   const [projectData, setProjectData] = useState({});
   const { id: projectId } = useParams();
+  const [permission, setPermission] = useState('');
   const [users, setUsers] = useState([
     { id: 'user1', role: 'master' },
     { id: 'user2', role: 'normal' },
@@ -35,6 +36,9 @@ const IDEPage = () => {
 
   useEffect(() => {
     console.log('2024-04-25 11:30');
+
+    const userInfo = JSON.parse(localStorage.getItem('ud'));
+    console.log('userInfo : ', userInfo);
 
     const connectWebSocket = () => {
       const socket = new SockJS(websocketUrl);
@@ -67,10 +71,23 @@ const IDEPage = () => {
     };
 
     api
-      .get(`/projects/get/${projectId}`)
+      .get(`/projects/${projectId}/get`)
       .then((res) => {
         console.log('rrrr : ', res);
+
         setProjectData(res.data);
+
+        console.log('===================================');
+        console.log('serverData : ', res);
+        console.log('server-id : ', res.data.host.id);
+        console.log('local-id : ', userInfo.id);
+        if (res.data.host.id === userInfo.id) {
+          setPermission('master');
+          console.log('master');
+        } else {
+          setPermission('normal');
+          console.log('normal');
+        }
       })
       .catch((err) => console.log('eeeeee : ', err));
 

@@ -22,6 +22,7 @@ export default function MainPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem('ud'));
     const getData = {
       isEnd: tabIndex === 0 ? false : true,
     };
@@ -44,14 +45,7 @@ export default function MainPage() {
         .catch((err) => console.log(err));
     }
 
-    getMyUser()
-      .then((res) => {
-        console.log('userData : ', res);
-        if (res.status === 200) {
-          setUserId(res.data.id);
-        }
-      })
-      .catch((err) => console.log('err : ', err));
+    setUserId(userInfo.id);
   }, [tabIndex]);
 
   const onFilter = useCallback(

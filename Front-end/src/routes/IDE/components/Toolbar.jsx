@@ -19,9 +19,9 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId })
 
   const { mutate: playContent, isLoading: isPlayingLoading } = useMutation(
     () => {
-      return api.post('/execute', { 
-        language: state.language, 
-        content: state.content 
+      return api.post('/execute', {
+        language: state.language,
+        content: state.content,
       });
     },
     {
@@ -33,7 +33,7 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId })
         console.error('Error playing file:', error);
         alert('Error playing file: ' + error.response.data.stderr);
       },
-    }
+    },
   );
 
   const handleSave = useCallback(async () => {
@@ -80,7 +80,7 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId })
             <span className={`${styles.tag} ${projectData.isLock ? 'private' : 'public'}`}>
               {projectData.isLock ? '비공개' : '공개'}
             </span>
-            <span className={`${styles.tag} ${projectData.tagLanguage}`}>{projectData.tagLanguage}</span>
+            <span className={`${styles.tag} ${projectData.language}`}>{projectData.language}</span>
           </div>
           <span className={styles.title}>{projectData.title}</span>
         </div>
