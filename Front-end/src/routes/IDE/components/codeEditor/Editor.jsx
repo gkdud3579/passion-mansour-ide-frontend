@@ -6,7 +6,7 @@ import { Box } from '@chakra-ui/react';
 import { CODE_SNIPPETS } from '../../Constants';
 import { ThemeContext } from '@emotion/react';
 
-const Editor = ({ state, setState, isMaster, stompClient, permission }) => {
+const Editor = ({ state, setState, stompClient, permission }) => {
   const { isDark } = useContext(ThemeContext);
   const [isTheme, setIsTheme] = useState('light');
   const [language, setLanguage] = useState('java');
@@ -34,19 +34,21 @@ const Editor = ({ state, setState, isMaster, stompClient, permission }) => {
   };
 
   const handleEditorChange = (newValue) => {
-    setState({
-      ...state,
-      content: newValue,
-      file: {
-        ...state.file,
+    if (!isReadOnly) {
+      setState({
+        ...state,
         content: newValue,
-      },
-    });
+        file: {
+          ...state.file,
+          content: newValue,
+        },
+      });
+    }
 
     // Send the new code to other users if the current user is the master
-    if (isMaster && stompClient && stompClient.current && stompClient.current.connected) {
+    if ( stompClient && stompClient.current && stompClient.current.connected) {
       stompClient.current.send(
-        'app/code/change/1',
+        '/app/code/change/1',
         JSON.stringify({
           type: 'UPDATE_CODE',
           fileContent: newValue,
@@ -68,7 +70,6 @@ const Editor = ({ state, setState, isMaster, stompClient, permission }) => {
         options={{ readOnly: isReadOnly }}
         onChange={handleEditorChange}
       />
-      {permission === 'master' && <p>마스터 모드에서 편집 중입니다!</p>}
     </Box>
   );
 };

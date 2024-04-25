@@ -18,18 +18,11 @@ const IDEPage = () => {
   const [projectData, setProjectData] = useState({});
   const { id: projectId } = useParams();
   const [permission, setPermission] = useState('');
-  const [users, setUsers] = useState([
-    { id: 'user1', role: 'master' },
-    { id: 'user2', role: 'normal' },
-  ]);
-  const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const stompClient = useRef(null);
   const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
-  console.log('2024-04-25 11:30');
   console.log(projectData);
 
   useEffect(() => {
-    console.log('2024-04-25 11:30');
 
     const userInfo = JSON.parse(localStorage.getItem('ud'));
     console.log('userInfo : ', userInfo);
@@ -93,7 +86,7 @@ const IDEPage = () => {
         console.log('Disconnected!');
       }
     };
-  }, [users, currentUserIndex]);
+  }, []);
 
   const handlePlaySuccess = (data) => {
     setOutput(data.stdout || data.stderr || data.exception);
@@ -144,7 +137,6 @@ const IDEPage = () => {
               permission={permission}
               stompClient={stompClient} // Ensure this prop is being passed correctly
             />
-
             <Output output={output} />
             {isChatVisible && <Chatting />}
           </div>

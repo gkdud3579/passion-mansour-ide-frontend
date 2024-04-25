@@ -38,11 +38,6 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId, s
 
   const handleSave = useCallback(async () => {
     try {
-      // await saveContent({
-      //   projectId: projectData.id,
-      //   language: state.language,
-      //   fileContent: state.fileContent,
-      // });
       const infoData = {
         language: state.language,
         content: state.file.content,
