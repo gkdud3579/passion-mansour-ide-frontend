@@ -1,1 +1,5 @@
+<<<<<<< HEAD
+{"author":"3420388456_424no_kakao-oidc","name":"passion-mansour-ide-","type":"react","detailedtype":"react","description":"IDE project frontend repository","date":"2024-04-24T14:37:43.000Z","plugins":{"goorm.plugin.react":[{"name":"react"}]},"is_user_plugin":false,"storage":"container","project_domain":[{"id":"3420388456_424no_kakao-oidc","url":"kmrzq-zsthitavaa.krampoline.com","port":"80"}],"show_preview_btn":true,"author_email":"zxzx3579@naver.com","author_name":"zxzx3579","ignore_patterns":[],"visibility":2}
+=======
 {"storage":"container","type":"react","detailedtype":"react","author":"3423049996_k1ef1_kakao-oidc","name":"passion-mansour-ide-","description":"IDE project frontend repository","date":"2024/4/25 0:0:29","plugins":{"goorm.plugin.react":[{}]},"is_user_plugin":false,"show_preview_btn":true,"author_email":"bakseungho@naver.com","author_name":"bakseungho","ignore_patterns":[],"project_domain":[{"id":"3423049996_k1ef1_kakao-oidc","url":"bocio-vdlfuqxnns.krampoline.com","port":"80"}],"visibility":2}
+>>>>>>> 258e9b5a6ed1947834fa299102f4ee220b7c4d82

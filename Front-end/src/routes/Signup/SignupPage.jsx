@@ -136,7 +136,7 @@ const SignupPage = () => {
     } else {
       axios
         .get(`${baseURL}/members/check-nickname?nickName=${form.nickname}`, {
-          withCredentials: false,
+          withCredentials: true,
         })
         .then((res) => {
           if (res.status === 200) {
@@ -167,7 +167,7 @@ const SignupPage = () => {
     } else {
       axios
         .get(`${baseURL}/members/check-loginId?loginId=${form.id}`, {
-          withCredentials: false,
+          withCredentials: true,
         })
         .then((res) => {
           if (res.status === 200) {

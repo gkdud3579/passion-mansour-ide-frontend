@@ -96,6 +96,7 @@ const Create = ({ userId, onClickCancel }) => {
         const roomInfo = {
           hostId: userId,
           ...form,
+          maxUser: Number(form.maxUser),
         };
 
         console.log('roomInfo : ', roomInfo);
@@ -104,7 +105,7 @@ const Create = ({ userId, onClickCancel }) => {
         console.log('roomRes : ', res);
         console.log('make success!!');
 
-        navigate(`/ide/${res.data.projectId}`);
+        navigate(`/ide/${res.data.id}`);
       } catch (err) {
         console.log(err);
       }
