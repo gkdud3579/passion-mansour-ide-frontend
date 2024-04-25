@@ -68,6 +68,7 @@ body {
   height: 100dvh;
   font-family: 'pretendard', 'sans-serif';
   background: var(--html-bg);
+  overflow-x: hidden;
 }
 
 ul,
@@ -87,24 +88,20 @@ a {
   background: #b2ffbe;
 }
 
-.c {
-  background: #b2ffbe;
-}
-
 .python {
-  background: #b2ffbe;
+  background: #fff0c8;
 }
 
 .typescript {
-  background: #b2ffbe;
+  background: #b6d8ff;
 }
 
 .php {
-  background: #b2ffbe;
+  background: #b6fffb;
 }
 
 .csharp {
-  background: #b2ffbe;
+  background: #e5bbff;
 }
 
 .public {

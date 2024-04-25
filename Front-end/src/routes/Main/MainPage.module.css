@@ -10,6 +10,7 @@
   flex-direction: column;
   align-items: center;
   width: 1080px;
+  padding-bottom: 120px;
 }
 
 .titleBox {
@@ -112,7 +113,7 @@
   border-radius: 5px;
   color: #000;
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .tag:first-child {

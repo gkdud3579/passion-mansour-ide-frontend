@@ -88,6 +88,10 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
 
   const handleInputChange = (e) => setInput(e.target.value);
 
+  const activeEnter = (e) => {
+    if (e.key === 'Enter') sendMessage();
+  };
+
   return (
     <div className={styles.chatModal}>
       <header className={styles.chatHeader}>
@@ -107,7 +111,11 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
           >
             <div className={styles.messageBubble}>
               <div className={styles.messageInfo}>
-                {message.isOwn ? <span className={styles.boldText}>나</span> : <span className={styles.userName}>{message.sender}</span>}
+                {message.isOwn ? (
+                  <span className={styles.boldText}>나</span>
+                ) : (
+                  <span className={styles.userName}>{message.sender}</span>
+                )}
                 <span className={styles.messageTimestamp}>{dayjs(message.timestamp).fromNow()}</span>
               </div>
               <p className={styles.messageText}>{message.text}</p>
@@ -121,6 +129,7 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
           className={styles.messageInput}
           value={input}
           onChange={handleInputChange}
+          onKeyUp={activeEnter}
           placeholder="Type your message..."
         />
         <button onClick={sendMessage} className={styles.sendButton}>

@@ -49,6 +49,7 @@
 
 .boldText {
   font-weight: bold;
+  color: var(--color);
 }
 
 .myMessage {
@@ -84,6 +85,7 @@
 
 .userName {
   font-weight: bold;
+  color: var(--color);
 }
 
 .messageTimestamp {

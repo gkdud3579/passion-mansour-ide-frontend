@@ -1,10 +1,10 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import styles from './Editor.module.css';
 import LanguageSelector from './LanguageSelector';
 import { Box } from '@chakra-ui/react';
 import { CODE_SNIPPETS } from '../../Constants';
-import { ThemeContext } from '@emotion/react';
+import ThemeContext from '../../../../contexts/themeContext';
 
 function debounce(func, wait) {
   let timeout;
@@ -15,19 +15,19 @@ function debounce(func, wait) {
   };
 }
 
-const Editor = ({ state, setState, stompClient, permission, projectId }) => {
+const Editor = ({
+  state,
+  setState,
+  stompClient,
+  permission,
+  projectId,
+  editorFontSize,
+  onFontSizePlus,
+  onFontSizeMinus,
+}) => {
   const { isDark } = useContext(ThemeContext);
-  const [isTheme, setIsTheme] = useState('light');
   const [language, setLanguage] = useState('java');
   const isReadOnly = permission === 'normal';
-
-  useEffect(() => {
-    if (isDark) {
-      setIsTheme('vs-dark');
-    } else {
-      setIsTheme('light');
-    }
-  }, [isDark]);
 
   const onSelect = (lang) => {
     setLanguage(lang);
@@ -72,14 +72,19 @@ const Editor = ({ state, setState, stompClient, permission, projectId }) => {
 
   return (
     <Box className={styles.container}>
-      <LanguageSelector language={language} onSelect={onSelect} />
+      <LanguageSelector
+        language={language}
+        onSelect={onSelect}
+        onFontSizePlus={onFontSizePlus}
+        onFontSizeMinus={onFontSizeMinus}
+      />
       <MonacoEditor
         height="100%"
-        theme={isTheme}
+        theme={isDark ? 'vs-dark' : 'light'}
         language={state.language}
         value={state.fileContent}
         defaultValue={CODE_SNIPPETS[language]}
-        options={{ readOnly: isReadOnly, fontSiz: '50px' }}
+        options={{ readOnly: isReadOnly, fontSize: editorFontSize }}
         onChange={handleEditorChange}
       />
     </Box>

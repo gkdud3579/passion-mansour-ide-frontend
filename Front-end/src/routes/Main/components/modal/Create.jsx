@@ -168,7 +168,7 @@ const Create = ({ userId, onClickCancel }) => {
               취소
             </button>
             <button type="submit" className={styles.confirm}>
-              확인
+              생성
             </button>
           </div>
         </form>

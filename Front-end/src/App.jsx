@@ -9,7 +9,7 @@ import './global.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PrivateContext from './contexts/privateContext';
 import { useEffect, useState } from 'react';
-import { ThemeContext } from '@emotion/react';
+import ThemeContext from './contexts/themeContext';
 import PwChange from './routes/PwChange/PwChange';
 import TestService from './routes/TestService/TestService';
 

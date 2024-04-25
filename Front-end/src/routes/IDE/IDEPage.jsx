@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Editor from './components/codeEditor/Editor';
 import Toolbar from './components/Toolbar';
@@ -8,7 +8,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import styles from './IDEPage.module.css';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../api/api';
 
 const IDEPage = () => {
@@ -21,9 +21,15 @@ const IDEPage = () => {
   const stompClient = useRef(null);
   const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
   const [userData, setUserData] = useState({});
-  console.log(projectData);
+  const [editorFontSize, setEditorFontSize] = useState(12);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!localStorage.getItem('access-token')) {
+      navigate('/login');
+    }
+
     console.log('projectId:', projectId);
     const userInfo = JSON.parse(localStorage.getItem('ud'));
     console.log('userInfo : ', userInfo);
@@ -100,6 +106,20 @@ const IDEPage = () => {
     },
   });
 
+  const onFontSizePlus = useCallback(() => {
+    setEditorFontSize((prev) => {
+      if (prev === 20) return prev;
+      else return prev + 1;
+    });
+  }, []);
+
+  const onFontSizeMinus = useCallback(() => {
+    setEditorFontSize((prev) => {
+      if (prev === 8) return prev;
+      else return prev - 1;
+    });
+  }, []);
+
   const runCode = async () => {
     setIsRunning(true);
     try {
@@ -137,6 +157,9 @@ const IDEPage = () => {
               permission={permission}
               stompClient={stompClient}
               projectId={projectId} // Ensure this prop is being passed correctly
+              editorFontSize={editorFontSize}
+              onFontSizePlus={onFontSizePlus}
+              onFontSizeMinus={onFontSizeMinus}
             />
             <Output output={output} />
 

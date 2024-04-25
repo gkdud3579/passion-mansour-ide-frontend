@@ -1,11 +1,12 @@
 import { Box, Button, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import { LANGUAGE_VERSIONS } from '../../Constants';
 import styles from './Editor.module.css';
+import { MinusIcon, PlusIcon } from '../../../../components/Icons';
 
 const languages = Object.entries(LANGUAGE_VERSIONS);
 const ACTIVE_COLOR = 'blue.400';
 
-const LanguageSelector = ({ language, onSelect }) => {
+const LanguageSelector = ({ language, onSelect, onFontSizePlus, onFontSizeMinus }) => {
   return (
     <Box className={styles.selectBox}>
       <Menu isLazy>
@@ -33,6 +34,17 @@ const LanguageSelector = ({ language, onSelect }) => {
           ))}
         </MenuList>
       </Menu>
+
+      <div className={styles.btnBox}>
+        <span className={styles.fsMsg}>글자크기 : </span>
+        <button onClick={onFontSizePlus} className={`${styles.icoBox} ${styles.btnNone}`}>
+          <PlusIcon size={14} />
+        </button>
+
+        <button onClick={onFontSizeMinus} className={`${styles.icoBox} ${styles.btnNone}`}>
+          <MinusIcon size={14} />
+        </button>
+      </div>
     </Box>
   );
 };

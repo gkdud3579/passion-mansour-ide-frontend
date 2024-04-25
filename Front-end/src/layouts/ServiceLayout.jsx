@@ -1,10 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './ServiceLayout.module.css';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { Logo } from '../components/Icons';
-import axios from 'axios';
-import api from '../api/api';
-import { getMyUser } from '../api/serviceApi';
 
 // msw - 다음 프로젝트 때 사용해보는걸로
 // api 폴더 만들어서 axios 인터셉터 설정 ( base_url )
@@ -13,18 +10,15 @@ const ServiceLayout = ({ children }) => {
   const [userData, setUserData] = useState({});
   const navigate = useNavigate();
 
+  useLayoutEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem('ud'));
+    setUserData(userInfo);
+  }, []);
+
   useEffect(() => {
     if (!localStorage.getItem('access-token')) {
       navigate('/login');
     }
-
-    getMyUser()
-      .then((res) => {
-        if (res.status === 200) {
-          setUserData(res.data);
-        }
-      })
-      .catch((err) => console.log('err : ', err));
   }, [navigate]);
 
   const onLogout = useCallback(() => {

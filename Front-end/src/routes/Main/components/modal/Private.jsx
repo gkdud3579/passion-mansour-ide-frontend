@@ -61,7 +61,7 @@ const Private = ({ privateRoom, onClickCancel }) => {
               취소
             </button>
             <button type="submit" className={styles.confirm}>
-              확인
+              입장
             </button>
           </div>
         </form>

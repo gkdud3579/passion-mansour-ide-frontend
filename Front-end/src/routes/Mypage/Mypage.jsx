@@ -4,7 +4,7 @@ import styles from './Mypage.module.css';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
-import { ThemeContext } from '@emotion/react';
+import ThemeContext from '../../contexts/themeContext';
 import api from '../../api/api';
 import { getMyUser } from '../../api/serviceApi';
 
@@ -225,7 +225,7 @@ export default function Mypage() {
               취소
             </button>
             <button type="submit" className={styles.confirm}>
-              저장
+              수정
             </button>
           </div>
         </form>

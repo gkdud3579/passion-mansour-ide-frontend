@@ -5,6 +5,8 @@ import styles from './Toolbar.module.css';
 import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/Icons';
 import { useCallback } from 'react';
 import api from '../../../api/api';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Toolbar = ({
   state,
@@ -81,6 +83,18 @@ const Toolbar = ({
   );
 
   const handleSave = useCallback(async () => {
+    const toastOps = {
+      position: 'bottom-center',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+      transition: Bounce,
+    };
+
     try {
       const infoData = {
         language: state.language,
@@ -92,9 +106,11 @@ const Toolbar = ({
       const res = await api.patch(`/projects/${projectId}/save`, infoData);
 
       console.log('save : ', res);
+
+      toast.success('저장되었습니다!', toastOps);
     } catch (error) {
       console.error('Error saving file:', error);
-      alert('Error saving file: ' + error.message);
+      toast.error(`${error.message}`, toastOps);
     }
   }, [state, projectId]);
 
@@ -147,6 +163,8 @@ const Toolbar = ({
         <button onClick={handlePlay} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isPlayingLoading}>
           <PlayIcon size={15} />
         </button>
+
+        <ToastContainer />
       </div>
     </div>
   );
