@@ -10,36 +10,36 @@ import { SearchIcon } from '../../../../components/Icons';
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
 
-const Chatting = ({ projectId, userId, websocketUrl }) => {
+const Chatting = ({ projectId, websocketUrl, userData }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const stompClient = useRef(null);
+  const [resMsg, setResMsg] = useState({});
 
   useEffect(() => {
-    const socket = new SockJS(websocketUrl);
-    stompClient.current = Stomp.over(socket);
+    function connect() {
+      const socket = new SockJS(websocketUrl);
+      stompClient.current = Stomp.over(socket);
+      stompClient.current.connect(
+        {},
+        (frame) => {
+          console.log('Connected: ' + frame);
+          stompClient.current.subscribe(`/topic/chat/${projectId}`, (sdkEvent) => {
+            console.log('Received message:', sdkEvent.body);
+            const msg = JSON.parse(sdkEvent.body);
+            addMessage(msg);
+            setResMsg(msg);
+            console.log('msg', msg);
+          });
+        },
+        (error) => {
+          console.error('Connection error: ', error);
+          setTimeout(connect, 5000); // Attempt to reconnect every 5 seconds
+        },
+      );
+    }
 
-    stompClient.current.connect(
-      {},
-      function (frame) {
-        console.log('Connected: ' + frame);
-        stompClient.current.subscribe(`/topic/chat/${projectId}`, function (sdkEvent) {
-          const msg = JSON.parse(sdkEvent.body);
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              ...msg,
-              text: msg.message,
-              isOwn: msg.senderId === userId,
-              special: msg.type === 'JOIN' || msg.type === 'LEAVE',
-            },
-          ]);
-        });
-      },
-      function (error) {
-        console.log('Connection error: ', error);
-      },
-    );
+    connect();
 
     return () => {
       if (stompClient.current && stompClient.current.connected) {
@@ -47,33 +47,35 @@ const Chatting = ({ projectId, userId, websocketUrl }) => {
         console.log('Disconnected!');
       }
     };
-  }, [projectId, userId]);
+  }, [websocketUrl, projectId]);
+
+  const addMessage = (msg, isOwn) => {
+    console.log('Adding message:', msg);
+    setMessages((prev) => [
+      ...prev,
+      {
+        ...msg,
+        isOwn: msg.userId === userData.id,
+        special: msg.type === 'JOIN' || msg.type === 'LEAVE',
+        sender: isOwn ? '나' : msg.sender,
+        text: msg.message, // 여기서 msg.message 값을 message.text에 설정합니다.
+      },
+    ]);
+  };
 
   const sendMessage = () => {
     if (input.trim() && stompClient.current && stompClient.current.connected) {
       const chatMessage = {
-        userId: userId,
+        userId: Number(`${userData.id}`),
         message: input,
         type: 'MESSAGE',
         timestamp: new Date().toISOString(),
       };
 
       stompClient.current.send(`/app/chat/${projectId}`, JSON.stringify(chatMessage), {});
-      addMessageToUI(chatMessage, true);
+      addMessage(chatMessage, true); // Assume the message is always from the user when sent
       setInput('');
     }
-  };
-
-  const addMessageToUI = (message, isOwn) => {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        ...message,
-        text: message.message,
-        isOwn,
-        special: message.type === 'JOIN' || message.type === 'LEAVE',
-      },
-    ]);
   };
 
   const handleInputChange = (e) => setInput(e.target.value);

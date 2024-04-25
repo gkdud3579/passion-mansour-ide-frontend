@@ -20,12 +20,13 @@ const IDEPage = () => {
   const [permission, setPermission] = useState('');
   const stompClient = useRef(null);
   const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
+  const [userData, setUserData] = useState({});
   console.log(projectData);
-
   useEffect(() => {
     console.log('projectId:', projectId);
     const userInfo = JSON.parse(localStorage.getItem('ud'));
     console.log('userInfo : ', userInfo);
+    setUserData(userInfo);
 
     const connectWebSocket = () => {
       const socket = new SockJS(websocketUrl);
@@ -135,8 +136,8 @@ const IDEPage = () => {
               projectId={projectId} // Ensure this prop is being passed correctly
             />
             <Output output={output} />
-            
-            {isChatVisible && <Chatting />}
+
+            {isChatVisible && <Chatting websocketUrl={websocketUrl} projectId={projectId} userData={userData} />}
           </div>
         </div>
       </ChakraProvider>
