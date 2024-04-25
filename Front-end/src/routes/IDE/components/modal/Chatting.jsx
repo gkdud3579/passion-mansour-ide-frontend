@@ -14,6 +14,7 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const stompClient = useRef(null);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     function connect() {
@@ -46,6 +47,14 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
       }
     };
   }, [messages, websocketUrl, projectId]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTick((prev) => prev + 1); // 시간 업데이트를 위한 인터벌
+    }, 60000); // 매분마다 업데이트
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   const addMessage = useCallback((msg) => {
     console.log('Adding message:', msg);
