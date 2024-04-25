@@ -85,13 +85,7 @@ const IDEPage = () => {
   }, [users, currentUserIndex]);
 
   const handlePlaySuccess = (data) => {
-    if (data.stdout) {
-      setOutput(data.stdout);
-    } else if (data.stderr) {
-      setOutput(data.stderr);
-    } else if (data.exception) {
-      setOutput(data.exception);
-    }
+    setOutput(data.stdout || data.stderr || data.exception);
   };
 
   const [isRunning, setIsRunning] = useState(false);

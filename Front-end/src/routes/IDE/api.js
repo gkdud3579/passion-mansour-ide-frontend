@@ -39,11 +39,10 @@ export const saveFileContent = async ({ projectId, language, fileContent = '' })
   return response.data;
 };
 
-export const playFileContent = async ({ projectId, language, file = '' }) => {
-  const response = await BackendAPI.post(`/projects/{projectId}/run`, {
-    projectId,
+export const playFileContent = async ({ projectId, language, content = '' }) => {
+  const response = await BackendAPI.post(`/projects/${projectId}/run`, {
     language,
-    file,
+    content,
   });
   return response.data;
 };

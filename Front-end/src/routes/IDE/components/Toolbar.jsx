@@ -17,18 +17,24 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId })
     },
   });
 
-  const { mutate: playContent, isLoading: isPlayingLoading } = useMutation(playFileContent, {
-    onSuccess: (data) => {
-      console.log('Play successful:', data);
-      // Assume onPlaySuccess function is defined elsewhere or pass it as a prop
-      // onPlaySuccess(data);
-      alert('Play successful!');
+  const { mutate: playContent, isLoading: isPlayingLoading } = useMutation(
+    () => {
+      return api.post('/execute', { 
+        language: state.language, 
+        content: state.fileContent 
+      });
     },
-    onError: (error) => {
-      console.error('Error playing file:', error);
-      alert('Error playing file: ' + error.message);
-    },
-  });
+    {
+      onSuccess: (data) => {
+        console.log('Play successful:', data);
+        onPlaySuccess(data); // Make sure this function is passed as a prop and defined to handle the successful response
+      },
+      onError: (error) => {
+        console.error('Error playing file:', error);
+        alert('Error playing file: ' + error.response.data.stderr);
+      },
+    }
+  );
 
   const handleSave = useCallback(async () => {
     try {
@@ -55,14 +61,11 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId })
 
   const handlePlay = async () => {
     try {
-      await playContent({
-        projectId: projectData.id,
-        language: state.language,
-        fileContent: state.fileContent, // Assuming fileContent is correct
-      });
+      // Directly call the mutate function without waiting for it as react-query handles the promise.
+      playContent();
     } catch (error) {
-      console.error('Error playing file:', error);
-      alert('Error playing file: ' + error.message);
+      console.error('Error executing code:', error);
+      alert('Error executing code: ' + error.message);
     }
   };
 
