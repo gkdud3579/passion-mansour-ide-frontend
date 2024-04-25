@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import styles from './Chatting.module.css';
@@ -14,7 +14,6 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const stompClient = useRef(null);
-  const [resMsg, setResMsg] = useState({});
 
   useEffect(() => {
     function connect() {
@@ -28,7 +27,6 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
             console.log('Received message:', sdkEvent.body);
             const msg = JSON.parse(sdkEvent.body);
             addMessage(msg);
-            setResMsg(msg);
             console.log('msg', msg);
           });
         },
@@ -47,21 +45,21 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
         console.log('Disconnected!');
       }
     };
-  }, [websocketUrl, projectId]);
+  }, [messages, websocketUrl, projectId]);
 
-  const addMessage = (msg, isOwn) => {
+  const addMessage = useCallback((msg) => {
     console.log('Adding message:', msg);
+
     setMessages((prev) => [
-      ...prev,
       {
         ...msg,
         isOwn: msg.userId === userData.id,
         special: msg.type === 'JOIN' || msg.type === 'LEAVE',
-        sender: isOwn ? '나' : msg.sender,
         text: msg.message, // 여기서 msg.message 값을 message.text에 설정합니다.
       },
+      ...prev,
     ]);
-  };
+  }, []);
 
   const sendMessage = () => {
     if (input.trim() && stompClient.current && stompClient.current.connected) {
@@ -73,7 +71,7 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
       };
 
       stompClient.current.send(`/app/chat/${projectId}`, JSON.stringify(chatMessage), {});
-      addMessage(chatMessage, true); // Assume the message is always from the user when sent
+      // addMessage(chatMessage, true); // Assume the message is always from the user when sent
       setInput('');
     }
   };
@@ -99,7 +97,7 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
           >
             <div className={styles.messageBubble}>
               <div className={styles.messageInfo}>
-                {message.special ? null : <span className={styles.userName}>{message.sender}</span>}
+                {message.isOwn ? <span>나</span> : <span className={styles.userName}>{message.sender}</span>}
                 <span className={styles.messageTimestamp}>{dayjs(message.timestamp).fromNow()}</span>
               </div>
               <p className={styles.messageText}>{message.text}</p>

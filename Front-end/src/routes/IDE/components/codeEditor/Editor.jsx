@@ -46,7 +46,7 @@ const Editor = ({ state, setState, stompClient, permission, projectId }) => {
     }
 
     // Send the new code to other users if the current user is the master
-    if ( stompClient && stompClient.current && stompClient.current.connected) {
+    if (stompClient && stompClient.current && stompClient.current.connected) {
       stompClient.current.send(
         `/app/code/change/${projectId}`,
         JSON.stringify({
@@ -67,7 +67,7 @@ const Editor = ({ state, setState, stompClient, permission, projectId }) => {
         language={state.language}
         value={state.fileContent}
         defaultValue={CODE_SNIPPETS[language]}
-        options={{ readOnly: isReadOnly }}
+        options={{ readOnly: isReadOnly, fontSiz: '50px' }}
         onChange={handleEditorChange}
       />
     </Box>
