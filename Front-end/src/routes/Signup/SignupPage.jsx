@@ -136,7 +136,7 @@ const SignupPage = () => {
     } else {
       axios
         .get(`${baseURL}/members/check-nickname?nickName=${form.nickname}`, {
-          withCredentials: true,
+          withCredentials: false,
         })
         .then((res) => {
           if (res.status === 200) {
@@ -166,9 +166,7 @@ const SignupPage = () => {
       setMsg({ ...msg, id: '영문+숫자 조합으로 입력해주세요' });
     } else {
       axios
-        .get(`${baseURL}/members/check-loginId?loginId=${form.id}`, {
-          withCredentials: true,
-        })
+        .get(`${baseURL}/members/check-loginId?loginId=${form.id}`)
         .then((res) => {
           if (res.status === 200) {
             setIsState({ ...isState, isId: true });
