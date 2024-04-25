@@ -65,7 +65,7 @@ const Editor = ({ state, setState, stompClient, permission, projectId }) => {
         height="100%"
         theme={isTheme}
         language={state.language}
-        value={state.content}
+        value={state.fileContent}
         defaultValue={CODE_SNIPPETS[language]}
         options={{ readOnly: isReadOnly }}
         onChange={handleEditorChange}
