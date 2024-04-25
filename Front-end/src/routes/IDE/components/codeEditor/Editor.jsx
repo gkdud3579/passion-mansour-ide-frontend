@@ -6,10 +6,11 @@ import { Box } from '@chakra-ui/react';
 import { CODE_SNIPPETS } from '../../Constants';
 import { ThemeContext } from '@emotion/react';
 
-const Editor = ({ state, setState, isMaster, stompClient }) => {
+const Editor = ({ state, setState, isMaster, stompClient, permission }) => {
   const { isDark } = useContext(ThemeContext);
   const [isTheme, setIsTheme] = useState('light');
   const [language, setLanguage] = useState('java');
+  const isReadOnly = permission === 'normal';
 
   useEffect(() => {
     if (isDark) {
@@ -64,10 +65,10 @@ const Editor = ({ state, setState, isMaster, stompClient }) => {
         language={state.language}
         value={state.content}
         defaultValue={CODE_SNIPPETS[language]}
-        options={{ readOnly: !isMaster }}
+        options={{ readOnly: isReadOnly }}
         onChange={handleEditorChange}
       />
-      {isMaster && <p>마스터 모드에서 편집 중입니다!</p>}
+      {permission === 'master' && <p>마스터 모드에서 편집 중입니다!</p>}
     </Box>
   );
 };

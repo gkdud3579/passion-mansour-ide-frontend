@@ -28,12 +28,6 @@ const IDEPage = () => {
   console.log('2024-04-25 11:30');
   console.log(projectData);
 
-  // project 정보
-  // 현재 활성 사용자 변경 (예시로 토글 방식 구현)
-  // const toggleUser = () => {
-  //   setCurrentUserIndex((currentIndex) => (currentIndex + 1) % users.length);
-  // };
-
   useEffect(() => {
     console.log('2024-04-25 11:30');
 
@@ -53,7 +47,7 @@ const IDEPage = () => {
 
     const onMessageReceived = (message) => {
       const messageData = JSON.parse(message.body);
-      if (messageData.type === 'UPDATE_CODE' && users[currentUserIndex].role !== 'master') {
+      if (messageData.type === 'UPDATE_CODE') {
         setState((prevState) => ({
           ...prevState,
           fileContent: messageData.fileContent,
@@ -147,7 +141,7 @@ const IDEPage = () => {
             <Editor
               state={state}
               setState={setState}
-              isMaster={users[currentUserIndex].role === 'master'}
+              permission={permission}
               stompClient={stompClient} // Ensure this prop is being passed correctly
             />
 
