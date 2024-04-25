@@ -1,10 +1,19 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import styles from './Editor.module.css';
 import LanguageSelector from './LanguageSelector';
 import { Box } from '@chakra-ui/react';
 import { CODE_SNIPPETS } from '../../Constants';
 import { ThemeContext } from '@emotion/react';
+
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+}
 
 const Editor = ({ state, setState, stompClient, permission, projectId }) => {
   const { isDark } = useContext(ThemeContext);
@@ -33,30 +42,33 @@ const Editor = ({ state, setState, stompClient, permission, projectId }) => {
     });
   };
 
-  const handleEditorChange = (newValue) => {
-    if (!isReadOnly) {
-      setState({
-        ...state,
-        content: newValue,
-        file: {
-          ...state.file,
+  const handleEditorChange = useCallback(
+    debounce((newValue) => {
+      if (!isReadOnly) {
+        setState({
+          ...state,
           content: newValue,
-        },
-      });
-    }
+          file: {
+            ...state.file,
+            content: newValue,
+          },
+        });
+      }
 
-    // Send the new code to other users if the current user is the master
-    if (stompClient && stompClient.current && stompClient.current.connected) {
-      stompClient.current.send(
-        `/app/code/change/${projectId}`,
-        JSON.stringify({
-          type: 'UPDATE_CODE',
-          fileContent: newValue,
-        }),
-        {},
-      );
-    }
-  };
+      // Send the new code to other users if the current user is the master
+      if (stompClient && stompClient.current && stompClient.current.connected) {
+        stompClient.current.send(
+          `/app/code/change/${projectId}`,
+          JSON.stringify({
+            type: 'UPDATE_CODE',
+            fileContent: newValue,
+          }),
+          {},
+        );
+      }
+    }, 500),
+    [state, stompClient, projectId, isReadOnly],
+  );
 
   return (
     <Box className={styles.container}>

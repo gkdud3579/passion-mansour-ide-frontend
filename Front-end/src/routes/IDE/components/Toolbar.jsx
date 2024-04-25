@@ -1,11 +1,28 @@
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
-import { saveFileContent, playFileContent } from '../api';
+import { saveFileContent } from '../api';
 import styles from './Toolbar.module.css';
 import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/Icons';
 import { useCallback } from 'react';
 import api from '../../../api/api';
 
-const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId, setOutput }) => {
+const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId, setOutput, permission }) => {
+  const navigate = useNavigate(); // 페이지 이동을 위한 history 객체 사용
+
+  const handleExit = async () => {
+    if (permission === 'master') {
+      try {
+        await api.post(`/projects/${projectId}/end`, { isEnd: true });
+        navigate('/main');
+      } catch (error) {
+        console.error('Error ending session:', error);
+        alert('Failed to end the session');
+      }
+    } else {
+      navigate('/main');
+    }
+  };
+
   const { mutate: saveContent, isLoading: isSavingLoading } = useMutation(saveFileContent, {
     onSuccess: (data) => {
       console.log('Save successful:', data);
@@ -56,8 +73,6 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId, s
 
   const handlePlay = async () => {
     try {
-      // Directly call the mutate function without waiting for it as react-query handles the promise.
-      // playContent();
       const infoData = {
         language: state.language,
         content: state.file.content,
@@ -79,7 +94,7 @@ const Toolbar = ({ state, isChatVisible, onChatToggle, projectData, projectId, s
   return (
     <div className={styles.container}>
       <div className={styles.leftButtons}>
-        <button className={`${styles.icoBox} ${styles.btnNone}`}>
+        <button onClick={handleExit} className={`${styles.icoBox} ${styles.btnNone}`}>
           <ExitIcon size={20} />
         </button>
         <div className={styles.infoBox}>
