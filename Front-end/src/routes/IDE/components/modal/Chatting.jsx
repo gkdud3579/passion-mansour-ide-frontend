@@ -28,7 +28,6 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
             console.log('Received message:', sdkEvent.body);
             const msg = JSON.parse(sdkEvent.body);
             addMessage(msg);
-            console.log('msg', msg);
           });
         },
         (error) => {
@@ -38,7 +37,9 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
       );
     }
 
-    connect();
+    if (!stompClient.current) {
+      connect();
+    }
 
     return () => {
       if (stompClient.current && stompClient.current.connected) {
@@ -46,7 +47,7 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
         console.log('Disconnected!');
       }
     };
-  }, [messages, websocketUrl, projectId]);
+  }, [websocketUrl, projectId]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
