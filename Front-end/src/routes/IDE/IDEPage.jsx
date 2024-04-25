@@ -23,7 +23,7 @@ const IDEPage = () => {
   console.log(projectData);
 
   useEffect(() => {
-
+    console.log('projectId:', projectId);
     const userInfo = JSON.parse(localStorage.getItem('ud'));
     console.log('userInfo : ', userInfo);
 
@@ -35,7 +35,7 @@ const IDEPage = () => {
 
     const onConnected = (frame) => {
       console.log('Connected: ' + frame);
-      stompClient.current.subscribe('/topic/code/1', onMessageReceived);
+      stompClient.current.subscribe(`/topic/code/${projectId}`, onMessageReceived);
     };
 
     const onMessageReceived = (message) => {
@@ -44,10 +44,6 @@ const IDEPage = () => {
         setState((prevState) => ({
           ...prevState,
           fileContent: messageData.fileContent,
-          file: {
-            name: prevState.file.name,
-            content: messageData.fileContent,
-          },
         }));
       }
     };
@@ -86,7 +82,7 @@ const IDEPage = () => {
         console.log('Disconnected!');
       }
     };
-  }, []);
+  }, [projectId]);
 
   const handlePlaySuccess = (data) => {
     setOutput(data.stdout || data.stderr || data.exception);
@@ -135,9 +131,11 @@ const IDEPage = () => {
               state={state}
               setState={setState}
               permission={permission}
-              stompClient={stompClient} // Ensure this prop is being passed correctly
+              stompClient={stompClient}
+              projectId={projectId} // Ensure this prop is being passed correctly
             />
             <Output output={output} />
+            
             {isChatVisible && <Chatting />}
           </div>
         </div>

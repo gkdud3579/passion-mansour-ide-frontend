@@ -6,7 +6,7 @@ import { Box } from '@chakra-ui/react';
 import { CODE_SNIPPETS } from '../../Constants';
 import { ThemeContext } from '@emotion/react';
 
-const Editor = ({ state, setState, stompClient, permission }) => {
+const Editor = ({ state, setState, stompClient, permission, projectId }) => {
   const { isDark } = useContext(ThemeContext);
   const [isTheme, setIsTheme] = useState('light');
   const [language, setLanguage] = useState('java');
@@ -48,7 +48,7 @@ const Editor = ({ state, setState, stompClient, permission }) => {
     // Send the new code to other users if the current user is the master
     if ( stompClient && stompClient.current && stompClient.current.connected) {
       stompClient.current.send(
-        '/app/code/change/1',
+        `/app/code/change/${projectId}`,
         JSON.stringify({
           type: 'UPDATE_CODE',
           fileContent: newValue,
