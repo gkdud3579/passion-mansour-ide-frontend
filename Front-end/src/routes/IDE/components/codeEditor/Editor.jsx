@@ -9,7 +9,7 @@ import { ThemeContext } from '@emotion/react';
 const Editor = ({ state, setState, isMaster, stompClient }) => {
   const { isDark } = useContext(ThemeContext);
   const [isTheme, setIsTheme] = useState('light');
-  const [language, setLanguage] = useState('javascript');
+  const [language, setLanguage] = useState('java');
 
   useEffect(() => {
     if (isDark) {
