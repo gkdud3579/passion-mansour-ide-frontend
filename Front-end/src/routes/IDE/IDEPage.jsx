@@ -53,6 +53,10 @@ const IDEPage = () => {
           ...prevState,
           fileContent: messageData.fileContent,
         }));
+      } else if (messageData.type === 'FORCE_DISCONNECT') {
+        // 서버로부터 세션 종료 메시지를 받은 경우
+        alert('The session has ended. You will be redirected to the main page.');
+        navigate('/main');
       }
     };
 
@@ -149,6 +153,8 @@ const IDEPage = () => {
             projectId={projectId}
             setOutput={setOutput}
             userData={userData}
+            websocketUrl={websocketUrl}
+            stompClient={stompClient}
           />
           <div className={styles.main}>
             <Editor

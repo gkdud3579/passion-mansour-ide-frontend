@@ -3,10 +3,10 @@ import { useMutation } from 'react-query';
 import { saveFileContent } from '../api';
 import styles from './Toolbar.module.css';
 import { CommentIcon, ExitIcon, PlayIcon, SaveIcon } from '../../../components/Icons';
-import { useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import api from '../../../api/api';
-import { ToastContainer, toast, Bounce } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import SockJS from 'sockjs-client';
+import Stomp from 'webstomp-client';
 
 const Toolbar = ({
   state,
@@ -16,21 +16,58 @@ const Toolbar = ({
   projectId,
   setOutput,
   permission,
-  stompClient,
   userData,
+  websocketUrl,
 }) => {
-  const navigate = useNavigate(); // 페이지 이동을 위한 history 객체 사용
+  const navigate = useNavigate();
+  const stompClient = useRef(null);
+
+  useEffect(() => {
+    // Establish websocket connection
+    const socket = new SockJS(websocketUrl);
+    stompClient.current = Stomp.over(socket);
+    stompClient.current.connect(
+      {},
+      () => {
+        console.log('Connected to the websocket');
+      },
+      (error) => {
+        console.error('Websocket connection error:', error);
+      },
+    );
+
+    return () => {
+      // Disconnect websocket connection on cleanup
+      if (stompClient.current && stompClient.current.connected) {
+        stompClient.current.disconnect();
+        console.log('Disconnected from websocket');
+      }
+    };
+  }, [websocketUrl]);
 
   const handleExit = async () => {
     if (permission === 'master') {
       try {
-        await api.post(`/projects/${projectId}/end`, { isEnd: true });
-        navigate('/main');
+        const message = {
+          isOwn: true,
+          type: 'LEAVE',
+        };
+        if (stompClient.current && stompClient.current.connected) {
+          stompClient.current.send(`/app/project/leave/${projectId}`, JSON.stringify(message), {});
+          navigate('/main');
+        }
       } catch (error) {
-        console.error('Error ending session:', error);
-        alert('Failed to end the session');
+        console.error('Error sending end session message:', error);
+        alert('Failed to send end session message');
       }
     } else {
+      const message = {
+        isOwn: false,
+        type: 'LEAVE',
+      };
+      if (stompClient.current && stompClient.current.connected) {
+        stompClient.current.send(`/app/project/leave/${projectId}`, JSON.stringify(message), {});
+      }
       navigate('/main');
     }
   };
@@ -83,18 +120,6 @@ const Toolbar = ({
   );
 
   const handleSave = useCallback(async () => {
-    const toastOps = {
-      position: 'bottom-center',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'colored',
-      transition: Bounce,
-    };
-
     try {
       const infoData = {
         language: state.language,
@@ -106,11 +131,9 @@ const Toolbar = ({
       const res = await api.patch(`/projects/${projectId}/save`, infoData);
 
       console.log('save : ', res);
-
-      toast.success('저장되었습니다!', toastOps);
     } catch (error) {
       console.error('Error saving file:', error);
-      toast.error(`${error.message}`, toastOps);
+      alert('Error saving file: ' + error.message);
     }
   }, [state, projectId]);
 
@@ -163,8 +186,6 @@ const Toolbar = ({
         <button onClick={handlePlay} className={`${styles.icoBox} ${styles.btnNone}`} disabled={isPlayingLoading}>
           <PlayIcon size={15} />
         </button>
-
-        <ToastContainer />
       </div>
     </div>
   );
