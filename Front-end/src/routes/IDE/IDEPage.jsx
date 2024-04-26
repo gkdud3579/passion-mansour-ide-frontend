@@ -155,6 +155,7 @@ const IDEPage = () => {
             userData={userData}
             websocketUrl={websocketUrl}
             stompClient={stompClient}
+            permission={permission}
           />
           <div className={styles.main}>
             <Editor

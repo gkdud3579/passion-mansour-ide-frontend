@@ -114,7 +114,7 @@ const Chatting = ({ projectId, websocketUrl, userData }) => {
                 {message.isOwn ? (
                   <span className={styles.boldText}>나</span>
                 ) : (
-                  <span className={styles.userName}>{message.sender}</span>
+                  <span className={`${styles.userName} ${message.special ? styles.hidden : ''}`}>{message.sender}</span>
                 )}
                 <span className={styles.messageTimestamp}>{dayjs(message.timestamp).fromNow()}</span>
               </div>
