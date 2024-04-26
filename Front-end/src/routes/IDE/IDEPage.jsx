@@ -51,7 +51,7 @@ const IDEPage = () => {
       if (messageData.type === 'UPDATE_CODE') {
         setState((prevState) => ({
           ...prevState,
-          content: messageData.content,
+          fileContent: messageData.fileContent,
         }));
       } else if (messageData.type === 'FORCE_DISCONNECT') {
         // 서버로부터 세션 종료 메시지를 받은 경우
@@ -103,7 +103,7 @@ const IDEPage = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [state, setState] = useState({
     language: 'javascript',
-    content: '',
+    fileContent: '',
     file: {
       name: 'NewFile.js',
       content: '',

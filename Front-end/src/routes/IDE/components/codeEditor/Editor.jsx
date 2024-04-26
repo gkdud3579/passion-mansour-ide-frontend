@@ -61,9 +61,9 @@ const Editor = ({
           `/app/code/change/${projectId}`,
           JSON.stringify({
             type: 'UPDATE_CODE',
-            content: newValue,
+            fileContent: newValue,
           }),
-          {}, 
+          {},
         );
       }
     }, 500),
@@ -82,7 +82,7 @@ const Editor = ({
         height="100%"
         theme={isDark ? 'vs-dark' : 'light'}
         language={state.language}
-        value={state.content}
+        value={state.fileContent}
         defaultValue={CODE_SNIPPETS[language]}
         options={{ readOnly: isReadOnly, fontSize: editorFontSize }}
         onChange={handleEditorChange}
