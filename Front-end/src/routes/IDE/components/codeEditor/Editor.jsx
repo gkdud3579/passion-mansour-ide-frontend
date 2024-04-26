@@ -47,10 +47,10 @@ const Editor = ({
       if (!isReadOnly) {
         setState({
           ...state,
-          content: newValue,
+          fileContent: newValue,
           file: {
             ...state.file,
-            content: newValue,
+            fileContent: newValue,
           },
         });
       }
@@ -61,9 +61,9 @@ const Editor = ({
           `/app/code/change/${projectId}`,
           JSON.stringify({
             type: 'UPDATE_CODE',
-            content: newValue,
+            fileContent: newValue,
           }),
-          {}, 
+          {},
         );
       }
     }, 500),

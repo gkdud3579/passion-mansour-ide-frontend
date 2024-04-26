@@ -140,12 +140,13 @@ export default function Mypage() {
           const res = await api.patch(`/members/update-profile`, userInfo);
 
           if (res.status === 200) {
-            console.log('mypage - res.data', res.data);
+            console.log('mypage - res.data', JSON.parse(res.config.data));
             console.log('mypage - userInfo', userInfo);
             console.log('수정 완료');
 
             window.alert('성공');
 
+            localStorage.setItem('ud', res.config.data);
             navigate('/main');
           }
         } catch (err) {
