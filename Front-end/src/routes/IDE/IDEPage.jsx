@@ -102,7 +102,7 @@ const IDEPage = () => {
 
   const [isRunning, setIsRunning] = useState(false);
   const [state, setState] = useState({
-    language: 'javascript',
+    language: 'java',
     fileContent: '',
     file: {
       name: 'NewFile.js',
