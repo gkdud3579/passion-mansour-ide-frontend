@@ -1,4 +1,62 @@
 # CodeVibe
+
+***CodeVibe*** is a learning-focused code review IDE application.  
+Users can view real-time updates to code reviews while communicating with study group members through a chat feature.  
+<img width="139" alt="CodeVibe Screenshot" src="https://github.com/passion-mansour/passion-mansour-teambeam-frontend/assets/76105226/f8425252-6428-43a6-81aa-6c0774444d17">
+
+
+
+## **Our Team**
+
+| Team Member | Role         |
+|:-----------:|:------------:|
+| Hayoung       | Frontend     |
+| Seungho       | Frontend     |
+| Seoyeon       | Backend      |
+| Kyeongwon     | Backend      |
+| Seunghun      | Deployment & Team Leader |
+
+
+
+## **Service Architecture**
+
+<img width="728" alt="Service Architecture" src="https://github.com/passion-mansour/passion-mansour-teambeam-frontend/assets/76105226/d17cb7a8-55c5-4940-9c8b-c3ac31aed7ec">
+
+
+
+## **Service Flow**
+
+<img width="507" alt="Service Flow" src="https://github.com/passion-mansour/passion-mansour-teambeam-frontend/assets/76105226/abec1b35-1d21-4ad2-a8b2-6782962d5b19">
+
+
+
+## **My Contribution**
+
+### **Real-Time Chat**
+- Implemented real-time chat functionality using **STOMP WebSocket** communication.
+- Designed a familiar messenger layout:
+  - Incoming messages appear on the left.
+  - Outgoing messages appear on the right.
+
+
+
+### **Real-Time Collaborative Code Editor**
+- Enabled execution of entered code via a **Run** button, displaying the output.
+- Implemented a **Save** button to store written code.
+- Used **STOMP WebSocket** to synchronize the host's code changes in real-time with all participants in the room.
+- Granted **edit access** exclusively to the room host.
+- Developed a **room destruction feature**:
+  - When the host ends the session, the room is marked as closed.
+  - Participants are forcibly removed from the room.
+
+
+
+CodeVibe empowers collaborative learning through seamless integration of real-time chat and code review, enhancing both productivity and engagement.
+
+
+---
+
+# CodeVibe
 ***CodeVibe***는 학습용 코드리뷰 IDE 어플리케이션입니다.<br/>
 실시간으로 수정되는 코드리뷰를 보며 스터디원들과 채팅으로 소통할 수 있습니다. <br/>
 <img width="139" alt="스크린샷 2024-07-10 오후 8 26 50" src="https://github.com/passion-mansour/passion-mansour-teambeam-frontend/assets/76105226/f8425252-6428-43a6-81aa-6c0774444d17">
